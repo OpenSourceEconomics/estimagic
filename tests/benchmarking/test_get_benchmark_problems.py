@@ -4,14 +4,21 @@ import numpy as np
 import pytest
 from estimagic import get_benchmark_problems
 
-PARMETRIZATION = []
-for name in ["more_wild", "cartis_roberts", "example", "estimagic"]:
+TEST_CASES = []
+for name in [
+    "more_wild",
+    "cartis_roberts",
+    "example",
+    "estimagic",
+    "scalar_functions",
+    "scalar_functions_extra",
+]:
     for additive, multiplicative, scaling in product([False, True], repeat=3):
-        PARMETRIZATION.append((name, additive, multiplicative, scaling))
+        TEST_CASES.append((name, additive, multiplicative, scaling))
 
 
 @pytest.mark.parametrize(
-    "name, additive_noise, multiplicative_noise, scaling", PARMETRIZATION
+    "name, additive_noise, multiplicative_noise, scaling", TEST_CASES
 )
 def test_get_problems(name, additive_noise, multiplicative_noise, scaling):
     is_noisy = any((additive_noise, multiplicative_noise))
@@ -26,8 +33,12 @@ def test_get_problems(name, additive_noise, multiplicative_noise, scaling):
     func = first["inputs"]["criterion"]
     params = first["inputs"]["params"]
 
-    first_eval = func(params)["value"]
-    second_eval = func(params)["value"]
+    if name in ("scalar_functions", "scalar_functions_extra"):
+        first_eval = func(params)
+        second_eval = func(params)
+    else:
+        first_eval = func(params)["value"]
+        second_eval = func(params)["value"]
 
     if is_noisy:
         assert first_eval != second_eval

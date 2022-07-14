@@ -1,6 +1,6 @@
 """Define the More-Wild Benchmark Set.
 
-This benchmark set is contains 53 test cases for nonlinear least squares solvers.
+This benchmark set contains 53 test cases for nonlinear least squares solvers.
 The test cases are built out of 22 functions, originally derived from the CUTEr
 Problems. It was used to benchmark all modern model based non-linear derivative
 free least squares solvers (e.g. POUNDERS, DFOGN, DFOLS).

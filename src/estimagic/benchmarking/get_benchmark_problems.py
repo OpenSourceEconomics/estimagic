@@ -5,6 +5,8 @@ import numpy as np
 from estimagic.benchmarking.cartis_roberts import CARTIS_ROBERTS_PROBLEMS
 from estimagic.benchmarking.more_wild import MORE_WILD_PROBLEMS
 from estimagic.benchmarking.noise_distributions import NOISE_DISTRIBUTIONS
+from estimagic.benchmarking.scalar_functions import SCALAR_FUNCTIONS_EXTRA_PROBLEMS
+from estimagic.benchmarking.scalar_functions import SCALAR_FUNCTIONS_PROBLEMS
 from estimagic.utilities import get_rng
 
 
@@ -15,6 +17,8 @@ def get_benchmark_problems(
     additive_noise_options=None,
     multiplicative_noise=False,
     multiplicative_noise_options=None,
+    lower_input_dim=None,
+    upper_input_dim=None,
     scaling=False,
     scaling_options=None,
     seed=None,
@@ -51,6 +55,10 @@ def get_benchmark_problems(
             implement multiplicative noise as `f_noisy = f * epsilon` but by
             `f_noisy` = f + (epsilon - 1) * f_clipped` where f_clipped is bounded
             away from zero from both sides by the clipping value.
+        lower_input_dim (int or None): Lower bound of function input dimension
+            for problems from the "scalar_functions" problem set.
+        upper_input_dim (int or None): Upper bound of function input dimension
+            for problems from the "scalar_functions" problem set.
         scaling (bool): Whether the parameter space of the problem should be rescaled.
         scaling_options (dict): Dict containing the keys "min_scale", and "max_scale".
             If scaling is True, the parameters the optimizer sees are the standard
@@ -71,6 +79,9 @@ def get_benchmark_problems(
     """
     rng = get_rng(seed)
     raw_problems = _get_raw_problems(name)
+    raw_problems = _filter_problems_by_input_dim(
+        raw_problems, lower_input_dim, upper_input_dim
+    )
 
     if additive_noise:
         additive_options = _process_noise_options(additive_noise_options, False)
@@ -93,7 +104,8 @@ def get_benchmark_problems(
     problems = {}
     for name, specification in raw_problems.items():
         inputs = _create_problem_inputs(
-            specification,
+            name=name,
+            specification=specification,
             additive_options=additive_options,
             multiplicative_options=multiplicative_options,
             scaling_options=scaling_options,
@@ -120,6 +132,10 @@ def _get_raw_problems(name):
             "implemented. Do not use this for any published work."
         )
         raw_problems = CARTIS_ROBERTS_PROBLEMS
+    elif name == "scalar_functions":
+        raw_problems = SCALAR_FUNCTIONS_PROBLEMS
+    elif name == "scalar_functions_extra":
+        raw_problems = SCALAR_FUNCTIONS_EXTRA_PROBLEMS
     elif name == "example":
         subset = {
             "rosenbrock_good_start",
@@ -196,8 +212,21 @@ def _get_raw_problems(name):
     return raw_problems
 
 
+def _filter_problems_by_input_dim(problems, lower_input_dim, upper_input_dim):
+    lower = lower_input_dim or 0
+    upper = upper_input_dim or np.inf
+    if lower > upper:
+        raise ValueError("lower_input_dim must be smaller than upper_input_dim.")
+    filtered = {
+        name: problem
+        for name, problem in problems.items()
+        if (lower <= len(problem["start_x"]) <= upper)
+    }
+    return filtered
+
+
 def _create_problem_inputs(
-    specification, additive_options, multiplicative_options, scaling_options, rng
+    name, specification, additive_options, multiplicative_options, scaling_options, rng
 ):
     _x = np.array(specification["start_x"])
 
@@ -209,6 +238,7 @@ def _create_problem_inputs(
 
     _criterion = partial(
         _internal_criterion_template,
+        name=name,
         criterion=specification["criterion"],
         additive_options=additive_options,
         multiplicative_options=multiplicative_options,
@@ -244,7 +274,13 @@ def _get_scaling_factor(x, options):
 
 
 def _internal_criterion_template(
-    params, criterion, additive_options, multiplicative_options, scaling_factor, rng
+    params,
+    name,
+    criterion,
+    additive_options,
+    multiplicative_options,
+    scaling_factor,
+    rng,
 ):
     if scaling_factor is not None:
         params = params / scaling_factor
@@ -259,8 +295,9 @@ def _internal_criterion_template(
     )
 
     noisy_critval = critval + noise
-
-    if isinstance(noisy_critval, np.ndarray):
+    if name == "scalar_functions":
+        out = noisy_critval
+    elif isinstance(noisy_critval, np.ndarray):
         out = {
             "root_contributions": noisy_critval,
             "value": noisy_critval @ noisy_critval,
