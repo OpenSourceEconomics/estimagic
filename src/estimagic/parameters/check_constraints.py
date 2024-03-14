@@ -7,7 +7,7 @@ See the module docstring of process_constraints for naming conventions.
 from functools import partial
 
 import numpy as np
-import pandas as pd
+
 
 from estimagic.exceptions import InvalidConstraintError, InvalidParamsError
 from estimagic.utilities import cov_params_to_matrix, sdcorr_params_to_matrix
@@ -186,9 +186,9 @@ def check_fixes_and_bounds(constr_info, transformations, parnames):
         parnames (list): List of parameter names.
 
     """
-    df = pd.DataFrame(constr_info, index=parnames)
+    constr_dict = constr_info.copy()
+    constr_dict["index"] = parnames
 
-    # Check fixes and bounds are compatible with other constraints
     prob_msg = (
         "{} constraints are incompatible with fixes or bounds. "
         "This is violated for:\n{}"
@@ -201,38 +201,63 @@ def check_fixes_and_bounds(constr_info, transformations, parnames):
 
     for constr in transformations:
         if constr["type"] in ["covariance", "sdcorr"]:
-            subset = df.iloc[constr["index"][1:]]
-            if subset["is_fixed_to_value"].any():
-                problematic = subset[subset["is_fixed_to_value"]].index
+            subset = _iloc(dictionary=constr_dict, position=constr["index"][1:])
+            if any(subset["is_fixed_to_value"]):
+                problematic = np.where(subset["is_fixed_to_value"])[0]
                 raise InvalidConstraintError(
                     cov_msg.format(constr["type"], problematic)
                 )
-            if np.isfinite(subset[["lower_bounds", "upper_bounds"]]).any(axis=None):
-                problematic = (
-                    subset.replace([-np.inf, np.inf], np.nan).dropna(how="all").index
-                )
-                raise InvalidConstraintError(
-                    cov_msg.format(constr["type"], problematic)
-                )
-        elif constr["type"] == "probability":
-            subset = df.iloc[constr["index"]]
-            if subset["is_fixed_to_value"].any():
-                problematic = subset[subset["is_fixed_to_value"]].index
+            if np.isfinite([subset["lower_bounds"], subset["upper_bounds"]]).any():
+                problematic = [k for k, v in subset.items() if np.any(~np.isfinite(v))]
                 raise InvalidConstraintError(
                     prob_msg.format(constr["type"], problematic)
                 )
-            if np.isfinite(subset[["lower_bounds", "upper_bounds"]]).any(axis=None):
-                problematic = (
-                    subset.replace([-np.inf, np.inf], np.nan).dropna(how="all").index
-                )
+        elif constr["type"] == "probability":
+            subset = _iloc(dictionary=constr_dict, position=constr["index"])
+            if any(subset["is_fixed_to_value"]):
+                problematic = np.where(subset["is_fixed_to_value"])[0].tolist()
                 raise InvalidConstraintError(
                     prob_msg.format(constr["type"], problematic)
                 )
 
-    invalid = df.query("lower_bounds >= upper_bounds")[["lower_bounds", "upper_bounds"]]
+            if np.isfinite([subset["lower_bounds"], subset["upper_bounds"]]).any():
+                problematic = [k for k, v in subset.items() if np.any(~np.isfinite(v))]
+                raise InvalidConstraintError(
+                    prob_msg.format(constr["type"], problematic)
+                )
+
+    invalid = {}
+    lower_bounds = constr_dict["lower_bounds"]
+    upper_bounds = constr_dict["upper_bounds"]
+
+    invalid = np.where(lower_bounds >= upper_bounds)[0]
+
     msg = (
         "lower_bound must be strictly smaller than upper_bound. "
         f"This is violated for:\n{invalid}"
     )
     if len(invalid) > 0:
         raise InvalidConstraintError(msg)
+
+
+def _iloc(dictionary, position):
+    """Substitute function for DataFrame.iloc.
+
+    It creates a subset of the input dictionary based on the
+    index values in the info list, and returns this subset as
+    a dictionary with numpy arrays.
+
+    Args:
+        dictionary (dict): Dictionary used to get a subset
+        position (list): Specifies which rows to select from the input dictionary
+
+    """
+    # Create subset based on index values in constr
+    subset = {}
+    for key in dictionary:
+        if key != "index":
+            subset[key] = [dictionary[key][int(i)] for i in position]
+    # Convert subset to a dictionary with numpy arrays
+    subset = {key: np.array(subset[key]) for key in subset}
+
+    return subset
