@@ -17,6 +17,7 @@ def data():
     df = pd.DataFrame()
     df["id"] = np.arange(900)
     df["hh"] = [3, 1, 2, 0, 0, 2, 5, 4, 5] * 100
+    df["weights"] = np.ones(900)
     return df
 
 
@@ -29,6 +30,20 @@ def test_get_bootstrap_indices_randomization_works_without_clustering(data):
 def test_get_bootstrap_indices_radomization_works_with_clustering(data):
     rng = get_rng(seed=12345)
     res = get_bootstrap_indices(data, cluster_by="hh", n_draws=2, rng=rng)
+    assert set(res[0]) != set(res[1])
+
+
+def test_get_bootstrap_indices_randomization_works_with_weights(data):
+    rng = get_rng(seed=12345)
+    res = get_bootstrap_indices(data, weight_by="weights", n_draws=2, rng=rng)
+    assert set(res[0]) != set(res[1])
+
+
+def test_get_bootstrap_indices_randomization_works_with_weights_and_clustering(data):
+    rng = get_rng(seed=12345)
+    res = get_bootstrap_indices(
+        data, weight_by="weights", cluster_by="hh", n_draws=2, rng=rng
+    )
     assert set(res[0]) != set(res[1])
 
 
