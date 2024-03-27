@@ -32,14 +32,14 @@ immediate and clearly defined tasks.
 1. Implement the fix or new feature.
 
 1. We validate contributions in three ways. First, we have a test suite to check the
-   implementation of respy. Second, we correct for stylistic errors in code and
+   implementation of estimagic. Second, we correct for stylistic errors in code and
    documentation using linters. Third, we test whether the documentation builds
    successfully.
 
-   You can run all checks with `tox` by running
+   You can run the test suit with
 
    ```bash
-   $ tox
+   $ pytest
    ```
 
    This will run the complete test suite. To run only a subset of the suite you can use
@@ -59,6 +59,42 @@ immediate and clearly defined tasks.
    ```bash
    $ pre-commit run -a
    ```
+
+   Lastly, check if the documentation builds correctly. To do so, go to the root
+   directory of your local estimagic repo and move to the `docs` folder. There, you need
+   to create the `estimagic-rtd` environment (I you haven't done so already) and
+   activate it:
+
+   ```bash
+   $ conda env create -f environment.yml
+   ```
+
+   ```bash
+   $ conda activate estimagic-rtd`
+   ```
+
+   Still in the docs folder, now build the sphinx documentation by typing
+
+   ```bash
+   $ make html
+   ```
+
+   and sphinx will create the documentation pages for you. You can open the html pages
+   of the documentation in you browser (e.g. Google Chrome) via
+
+   ```bash
+   $ google-chrome build/html/index.html
+   ```
+
+   and check if everything looks fine. Instead of the index page, you can also open a
+   specific documentation page, e.g.,
+
+   ```bash
+   $ google-chrome build/html/explanations/optimization/why_optimization_is_hard.html
+   ```
+
+   Whatever page you are on, you can always move to another section by simply clicking -
+   exactly as you would do in the online documentation.
 
 5) If the tests pass, push your changes to your repository. Go to the Github page of
    your fork. A banner will be displayed asking you whether you would like to create a
