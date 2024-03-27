@@ -164,6 +164,7 @@ html_logo = "_static/images/estimagic_logo.svg"
 
 html_theme_options = {
     "github_url": "https://github.com/OpenSourceEconomics/estimagic",
+    "logo": {"image_dark": "_static/images/estimagic_logo_dark_mode.svg"},
 }
 
 html_css_files = ["css/custom.css"]

@@ -1,6 +1,19 @@
 ```{raw} html
-<div id="logo" style="text-align:center;">
-<img src="_static/images/estimagic_logo.svg" alt="estimagic icon" height="100" />
+<style>
+    .logo.mainlogo img {
+        background-color: transparent; /* Ensure SVG has no background */
+        max-height: 100px; /* Adjust size as needed */
+    }
+</style>
+
+<!-- Light mode logo -->
+<div class="logo mainlogo only-light" style="text-align: center;">
+    <img src="_static/images/estimagic_logo.svg" alt="estimagic-logo" height="100" />
+</div>
+
+<!-- Dark mode logo -->
+<div class="logo mainlogo only-dark" style="text-align: center;">
+    <img src="_static/images/estimagic_logo_dark_mode.svg" alt="estimagic-logo" height="100" />
 </div>
 ```
 
