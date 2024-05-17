@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, Callable
 
 import numpy as np
 from pybaum import leaf_names, tree_flatten, tree_just_flatten, tree_unflatten
@@ -217,17 +217,17 @@ def _get_derivative_flatten(registry, primary_key, params, func_eval, derivative
 
 
 class TreeConverter(NamedTuple):
-    params_flatten: callable
-    params_unflatten: callable
-    func_flatten: callable
-    derivative_flatten: callable
+    params_flatten: Callable
+    params_unflatten: Callable
+    func_flatten: Callable
+    derivative_flatten: Callable
 
 
 class FlatParams(NamedTuple):
     values: np.ndarray
     lower_bounds: np.ndarray
     upper_bounds: np.ndarray
-    soft_lower_bounds: np.ndarray = None
-    soft_upper_bounds: np.ndarray = None
-    names: list = None
-    free_mask: np.ndarray = None
+    soft_lower_bounds: np.ndarray | None = None
+    soft_upper_bounds: np.ndarray | None = None
+    names: list | None = None
+    free_mask: np.ndarray | None = None

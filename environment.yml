@@ -36,6 +36,7 @@ dependencies:
   - sphinxcontrib-bibtex  # docs
   - tranquilo>=0.0.4  # dev, tests
   - seaborn  # dev, tests
+  - mypy  # dev, tests
   - pip:  # dev, tests, docs
       - DFO-LS  # dev, tests
       - Py-BOBYQA  # dev, tests
@@ -48,3 +49,7 @@ dependencies:
       - pre-commit  # dev
       - simoptlib==1.0.1  # dev, tests
       - -e .  # dev
+      # type stubs
+      - pandas-stubs  # dev, tests
+      - types-cffi  # dev, tests
+      - types-openpyxl  # dev, tests

@@ -106,3 +106,202 @@ norecursedirs = ["docs", ".envs"]
 line_length = 88
 sequence_style = "block_style"
 none_representation = "null"
+
+
+[tool.mypy]
+files = ["src", "tests"]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+    "estimagic.benchmarking",
+    "estimagic.benchmarking.benchmark_reports",
+    "estimagic.benchmarking.cartis_roberts",
+    "estimagic.benchmarking.get_benchmark_problems",
+    "estimagic.benchmarking.more_wild",
+    "estimagic.benchmarking.noise_distributions",
+    "estimagic.benchmarking.process_benchmark_results",
+    "estimagic.benchmarking.run_benchmark",
+
+    "estimagic.dashboard",
+    "estimagic.dashboard.callbacks",
+    "estimagic.dashboard.colors",
+    "estimagic.dashboard.dashboard_app",
+    "estimagic.dashboard.plot_functions",
+    "estimagic.dashboard.run_dashboard",
+
+    "estimagic.differentiation",
+    "estimagic.differentiation.derivatives",
+    "estimagic.differentiation.finite_differences",
+    "estimagic.differentiation.generate_steps",
+    "estimagic.differentiation.richardson_extrapolation",
+
+    "estimagic.estimation",
+    "estimagic.estimation.estimate_ml",
+    "estimagic.estimation.estimate_msm",
+    "estimagic.estimation.estimation_summaries",
+    "estimagic.estimation.msm_weighting",
+
+    "estimagic.examples",
+    "estimagic.examples.criterion_functions",
+    "estimagic.examples.logit",
+    "estimagic.examples.numdiff_functions",
+
+    "estimagic.inference",
+    "estimagic.inference.bootstrap_ci",
+    "estimagic.inference.bootstrap_helpers",
+    "estimagic.inference.bootstrap_outcomes",
+    "estimagic.inference.bootstrap_samples",
+    "estimagic.inference.bootstrap",
+    "estimagic.inference.ml_covs",
+    "estimagic.inference.msm_covs",
+    "estimagic.inference.shared",
+
+    "estimagic.logging",
+    "estimagic.logging.create_tables",
+    "estimagic.logging.load_database",
+    "estimagic.logging.read_from_database",
+    "estimagic.logging.read_log",
+    "estimagic.logging.write_to_database",
+
+    "estimagic.optimization",
+    "estimagic.optimization.subsolvers",
+    "estimagic.optimization.subsolvers._conjugate_gradient",
+    "estimagic.optimization.subsolvers._steihaug_toint",
+    "estimagic.optimization.subsolvers._trsbox",
+    "estimagic.optimization.subsolvers.bntr",
+    "estimagic.optimization.subsolvers.gqtpar",
+    "estimagic.optimization.subsolvers.linear_subsolvers",
+    "estimagic.optimization.algo_options",
+    "estimagic.optimization.bhhh",
+    "estimagic.optimization.check_arguments",
+    "estimagic.optimization.convergence_report",
+    "estimagic.optimization.cyipopt_optimizers",
+    "estimagic.optimization.error_penalty",
+    "estimagic.optimization.fides_optimizers",
+    "estimagic.optimization.get_algorithm",
+    "estimagic.optimization.history_tools",
+    "estimagic.optimization.internal_criterion_template",
+    "estimagic.optimization.nag_optimizers",
+    "estimagic.optimization.neldermead",
+    "estimagic.optimization.nlopt_optimizers",
+    "estimagic.optimization.optimization_logging",
+    "estimagic.optimization.optimize_result",
+    "estimagic.optimization.optimize",
+    "estimagic.optimization.pounders_auxiliary",
+    "estimagic.optimization.pounders_history",
+    "estimagic.optimization.pounders",
+    "estimagic.optimization.process_multistart_sample",
+    "estimagic.optimization.process_results",
+    "estimagic.optimization.pygmo_optimizers",
+    "estimagic.optimization.scipy_optimizers",
+    "estimagic.optimization.simopt_optimizers",
+    "estimagic.optimization.tao_optimizers",
+    "estimagic.optimization.tiktak",
+    "estimagic.optimization.tranquilo",
+
+    "estimagic.parameters",
+    "estimagic.parameters.block_trees",
+    "estimagic.parameters.check_constraints",
+    "estimagic.parameters.consolidate_constraints",
+    "estimagic.parameters.constraint_tools",
+    "estimagic.parameters.conversion",
+    "estimagic.parameters.kernel_transformations",
+    "estimagic.parameters.nonlinear_constraints",
+    "estimagic.parameters.parameter_bounds",
+    "estimagic.parameters.parameter_groups",
+    "estimagic.parameters.process_constraints",
+    "estimagic.parameters.process_selectors",
+    "estimagic.parameters.scale_conversion",
+    "estimagic.parameters.space_conversion",
+    "estimagic.parameters.tree_conversion",
+    "estimagic.parameters.tree_registry",
+
+    "estimagic.sensitivity",
+    "estimagic.sensitivity.msm_sensitivity",
+
+    "estimagic.shared",
+    "estimagic.shared.check_option_dicts",
+
+    "estimagic.visualization",
+    "estimagic.visualization.convergence_plot",
+    "estimagic.visualization.derivative_plot",
+    "estimagic.visualization.deviation_plot",
+    "estimagic.visualization.estimation_table",
+    "estimagic.visualization.history_plots",
+    "estimagic.visualization.lollipop_plot",
+    "estimagic.visualization.plotting_utilities",
+    "estimagic.visualization.profile_plot",
+    "estimagic.visualization.slice_plot",
+
+    "estimagic",
+    "estimagic.batch_evaluators",
+    "estimagic.cli",
+    "estimagic.compat",
+    "estimagic.decorators",
+    "estimagic.exceptions",
+    "estimagic.process_user_function",
+    "estimagic.utilities",
+]
+check_untyped_defs = false
+disallow_any_generics = false
+disallow_untyped_defs = false
+
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pybaum",
+    "scipy",
+    "scipy.linalg",
+    "scipy.linalg.lapack",
+    "scipy.stats",
+    "scipy.optimize",
+    "scipy.ndimage",
+    "scipy.optimize._trustregion_exact",
+    "plotly",
+    "plotly.graph_objects",
+    "plotly.express",
+    "plotly.subplots",
+    "cyipopt",
+    "nlopt",
+    "bokeh",
+    "bokeh.layouts",
+    "bokeh.models",
+    "bokeh.plotting",
+    "bokeh.application",
+    "bokeh.application.handlers",
+    "bokeh.application.handlers.function",
+    "bokeh.server",
+    "bokeh.server.server",
+    "bokeh.command",
+    "bokeh.command.util",
+    "fides",
+    "simopt",
+    "simopt.base",
+    "simopt.experiment_base",
+    "petsc4py",
+    "tranquilo",
+    "tranquilo.tranquilo",
+    "dfols",
+    "pybobyqa",
+    "pygmo",
+    "jax",
+    "joblib",
+    "cloudpickle",
+    "numba",
+    "pathos",
+    "pathos.pools",
+    "estimagic._version",
+  ]
+ignore_missing_imports = true

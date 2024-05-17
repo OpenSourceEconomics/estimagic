@@ -34,7 +34,7 @@ n_internal the length of the internal parameter vector.
 """
 
 from functools import partial
-from typing import NamedTuple
+from typing import NamedTuple, Callable
 
 import numpy as np
 
@@ -149,9 +149,9 @@ def get_space_converter(
 
 
 class SpaceConverter(NamedTuple):
-    params_to_internal: callable
-    params_from_internal: callable
-    derivative_to_internal: callable
+    params_to_internal: Callable
+    params_from_internal: Callable
+    derivative_to_internal: Callable
     has_transforming_constraints: bool
 
 
@@ -513,7 +513,7 @@ class InternalParams(NamedTuple):
     values: np.ndarray
     lower_bounds: np.ndarray
     upper_bounds: np.ndarray
-    soft_lower_bounds: np.ndarray = None
-    soft_upper_bounds: np.ndarray = None
-    names: list = None
-    free_mask: np.ndarray = None
+    soft_lower_bounds: np.ndarray | None = None
+    soft_upper_bounds: np.ndarray | None = None
+    names: list | None = None
+    free_mask: np.ndarray | None = None

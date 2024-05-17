@@ -22,10 +22,13 @@ dependencies:
   - sqlalchemy  # run, tests
   - tranquilo>=0.0.4  # dev, tests
   - seaborn  # dev, tests
+  - mypy  # dev, tests
   - pip:  # dev, tests, docs
       - DFO-LS  # dev, tests
       - Py-BOBYQA  # dev, tests
       - fides==0.7.4  # dev, tests
       - kaleido  # dev, tests
       - simoptlib==1.0.1  # dev, tests
+      - types-cffi  # dev, tests
+      - types-openpyxl  # dev, tests
       - -e ../

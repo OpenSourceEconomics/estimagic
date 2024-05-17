@@ -1,5 +1,5 @@
 from functools import partial
-from typing import NamedTuple
+from typing import NamedTuple, Callable
 
 import numpy as np
 
@@ -95,10 +95,10 @@ def get_scale_converter(
 
 
 class ScaleConverter(NamedTuple):
-    params_to_internal: callable
-    params_from_internal: callable
-    derivative_to_internal: callable
-    derivative_from_internal: callable
+    params_to_internal: Callable
+    params_from_internal: Callable
+    derivative_to_internal: Callable
+    derivative_from_internal: Callable
 
 
 def _fast_path_scale_converter():

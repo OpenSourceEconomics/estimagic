@@ -1,6 +1,6 @@
 """Aggregate the multiple parameter and function output conversions into on."""
 
-from typing import NamedTuple
+from typing import NamedTuple, Callable
 
 import numpy as np
 
@@ -164,10 +164,10 @@ def get_converter(
 
 
 class Converter(NamedTuple):
-    params_to_internal: callable
-    params_from_internal: callable
-    derivative_to_internal: callable
-    func_to_internal: callable
+    params_to_internal: Callable
+    params_from_internal: Callable
+    derivative_to_internal: Callable
+    func_to_internal: Callable
     has_transforming_constraints: bool
 
 
