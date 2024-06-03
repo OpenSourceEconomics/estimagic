@@ -39,28 +39,30 @@ def check_constraints_are_satisfied(flat_constraints, param_values, param_names)
         typ = constr["type"]
         subset = param_values[constr["index"]]
 
+        report = []
+
         _msg = partial(_get_message, constr, param_names)
 
         if typ == "covariance":
             cov = cov_params_to_matrix(subset)
             e, _ = np.linalg.eigh(cov)
             if not np.all(e > -1e-8):
-                raise InvalidParamsError(_msg())
+                report.append(_msg())
         elif typ == "sdcorr":
             cov = sdcorr_params_to_matrix(subset)
             e, _ = np.linalg.eigh(cov)
             if not np.all(e > -1e-8):
-                raise InvalidParamsError(_msg())
+                report.append(_msg())
         elif typ == "probability":
             if not np.isclose(subset.sum(), 1, rtol=0.01):
                 explanation = "Probabilities do not sum to 1."
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
             if np.any(subset < 0):
                 explanation = "There are negative Probabilities."
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
             if np.any(subset > 1):
                 explanation = "There are probabilities larger than 1."
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
         elif typ == "fixed":
             if "value" in constr and not np.allclose(subset, constr["value"]):
                 explanation = (
@@ -68,27 +70,31 @@ def check_constraints_are_satisfied(flat_constraints, param_values, param_names)
                     "was allowed in earlier versions of estimagic but is "
                     "forbidden now. "
                 )
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
         elif typ == "increasing":
             if np.any(np.diff(subset) < 0):
-                raise InvalidParamsError(_msg())
+                report.append(_msg())
         elif typ == "decreasing":
             if np.any(np.diff(subset) > 0):
-                InvalidParamsError(_msg())
+                report.append(_msg())
         elif typ == "linear":
             wsum = subset.dot(constr["weights"])
             if "lower_bound" in constr and wsum < constr["lower_bound"]:
                 explanation = "Lower bound of linear constraint is violated."
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
             elif "upper_bound" in constr and wsum > constr["upper_bound"]:
                 explanation = "Upper bound of linear constraint violated"
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
             elif "value" in constr and not np.isclose(wsum, constr["value"]):
                 explanation = "Equality condition of linear constraint violated"
-                raise InvalidParamsError(_msg(explanation))
+                report.append(_msg(explanation))
         elif typ == "equality":
             if len(set(subset.tolist())) > 1:
-                raise InvalidParamsError(_msg())
+                report.append(_msg())
+
+        report = "\n".join(report)
+        if report != "":
+            raise InvalidParamsError(f"Violated constraint at start params:\n{report}")
 
 
 def _get_message(constraint, param_names, explanation=""):
