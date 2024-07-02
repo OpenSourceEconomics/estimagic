@@ -38,12 +38,9 @@ def test_create_solution_times_n_evaluations():
         data=[
             ["prob1", "algo1", 0],
             ["prob1", "algo1", 1],
-            #
             ["prob1", "algo2", 2],
             ["prob1", "algo2", 3],
-            #
             ["prob2", "algo1", 5],
-            #
             ["prob2", "algo2", 0],
             ["prob2", "algo2", 1],
         ],
@@ -76,12 +73,9 @@ def test_create_solution_times_n_batches():
         data=[
             ["prob1", "algo1", 0],
             ["prob1", "algo1", 1],
-            #
             ["prob1", "algo2", 2],
             ["prob1", "algo2", 2],
-            #
             ["prob2", "algo1", 1],
-            #
             ["prob2", "algo2", 0],
             ["prob2", "algo2", 0],
         ],
@@ -112,12 +106,9 @@ def test_create_solution_times_walltime():
         data=[
             ["prob1", "algo1", 0, 0],
             ["prob1", "algo1", 1, 1],
-            #
             ["prob1", "algo2", 2, 2],
             ["prob1", "algo2", 3, 3],
-            #
             ["prob2", "algo1", 5, 5],
-            #
             ["prob2", "algo2", 0, 0],
             ["prob2", "algo2", 1, 1],
         ],

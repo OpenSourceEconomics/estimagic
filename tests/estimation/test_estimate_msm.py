@@ -82,7 +82,6 @@ def test_estimate_msm(simulate_moments, moments_cov, optimize_options):
     # works only because parameter point estimates are exactly zero
     aaae(calculated.p_values(), np.ones(3))
 
-    #
     expected_ci_upper = np.array([1.95996398, 2.77180765, 3.3947572])
     expected_ci_lower = -expected_ci_upper
 

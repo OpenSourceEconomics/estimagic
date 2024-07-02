@@ -17,7 +17,6 @@ test_cases = [
     {"dual_inf_tol": 2.5},
     {"constr_viol_tol": 1e-7},
     {"compl_inf_tol": 1e-7},
-    #
     {"acceptable_iter": 15},
     {"acceptable_tol": 1e-5},
     {"acceptable_dual_inf_tol": 1e-5},
@@ -46,7 +45,6 @@ test_cases = [
     {"nlp_scaling_constr_target_gradient": 0},
     {"nlp_scaling_constr_target_gradient": 2e-9},
     {"nlp_scaling_min_value": 1e-9},
-    #
     {"bound_push": 0.02},
     {"bound_frac": 0.02},
     {"slack_bound_push": 0.001},

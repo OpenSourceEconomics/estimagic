@@ -39,7 +39,6 @@ def pygmo_gaco(
     n_cores=1,
     seed=None,
     discard_start_params=False,
-    #
     stopping_max_iterations=STOPPING_MAX_ITERATIONS_GENETIC,
     kernel_size=63,
     speed_parameter_q=1.0,
@@ -493,7 +492,6 @@ def pygmo_cmaes(
     population_size=None,
     seed=None,
     discard_start_params=False,
-    #
     stopping_max_iterations=STOPPING_MAX_ITERATIONS_GENETIC,
     backward_horizon=None,
     variance_loss_compensation=None,
@@ -562,7 +560,6 @@ def pygmo_simulated_annealing(
     population_size=None,
     seed=None,
     discard_start_params=False,
-    #
     start_temperature=10.0,
     end_temperature=0.01,
     n_temp_adjustments=10,
@@ -868,7 +865,6 @@ def pygmo_xnes(
     population_size=None,
     seed=None,
     discard_start_params=False,
-    #
     stopping_max_iterations=STOPPING_MAX_ITERATIONS_GENETIC,
     learning_rate_mean_update=1.0,
     learning_rate_step_size_update=None,
@@ -982,7 +978,6 @@ def pygmo_compass_search(
     population_size=None,
     seed=None,
     discard_start_params=False,
-    #
     stopping_max_criterion_evaluations=STOPPING_MAX_CRITERION_EVALUATIONS_GLOBAL,
     start_range=0.1,
     stop_range=0.01,
@@ -1044,7 +1039,6 @@ def pygmo_ihs(
     population_size=None,
     seed=None,
     discard_start_params=False,
-    #
     stopping_max_iterations=STOPPING_MAX_ITERATIONS_GENETIC,
     choose_from_memory_probability=0.85,
     min_pitch_adjustment_rate=0.35,
@@ -1109,7 +1103,6 @@ def pygmo_de1220(
     population_size=None,
     seed=None,
     discard_start_params=False,
-    #
     jde=True,
     stopping_max_iterations=STOPPING_MAX_ITERATIONS_GENETIC,
     allowed_variants=None,

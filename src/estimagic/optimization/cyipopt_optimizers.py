@@ -35,7 +35,6 @@ def ipopt(
     dual_inf_tol=1.0,
     constr_viol_tol=0.0001,
     compl_inf_tol=0.0001,
-    #
     s_max=100.0,
     mu_target=0.0,
     # stopping criteria
@@ -49,7 +48,6 @@ def ipopt(
     acceptable_constr_viol_tol=0.01,
     acceptable_compl_inf_tol=0.01,
     acceptable_obj_change_tol=1e20,
-    #
     diverging_iterates_tol=1e20,
     nlp_lower_bound_inf=-1e19,
     nlp_upper_bound_inf=1e19,
@@ -334,7 +332,6 @@ def ipopt(
         "pardiso_msglvl": 0,
         # disable derivative checker
         "derivative_test": "none",
-        #
         "s_max": float(s_max),
         "max_iter": stopping_max_iterations,
         "max_wall_time": float(stopping_max_wall_time_seconds),
@@ -492,7 +489,6 @@ def ipopt(
         # linear solver
         "linear_solver": linear_solver,
         **linear_solver_options,
-        #
         **converted_bool_to_str_options,
     }
 
