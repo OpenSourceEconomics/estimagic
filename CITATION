@@ -4,16 +4,16 @@ x.y) from this installation
 
 Text:
 
-[estimagic]  estimagic x.y, 2021
-Janos Gabler, http://estimagic.readthedocs.io
+[optimagic]  optimagic x.y, 2024
+Janos Gabler, https://github.com/OpenSourceEconomics/optimagic
 
 BibTeX:
 
-@Unpublished{Gabler2022,
-      Title  = {A Python Tool for the Estimation of large scale scientific models.},
+@Unpublished{Gabler2024,
+      Title  = {optimagic: A library for nonlinear optimization},
       Author = {Janos Gabler},
-      Year   = {2022},
-      Url    = {https://github.com/OpenSourceEconomics/estimagic}
+      Year   = {2024},
+      Url    = {https://github.com/OpenSourceEconomics/optimagic}
     }
 
-If you are unsure about which version of estimagic you are using run: `conda list estimagic`.
+If you are unsure about which version of optimagic you are using run: `conda list optimagic`.

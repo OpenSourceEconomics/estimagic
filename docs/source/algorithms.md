@@ -9,8 +9,8 @@ when using `maximize` or `minimize`.
 
 (scipy-algorithms)=
 
-estimagic supports most `scipy` algorithms and scipy is automatically installed when you
-install estimagic.
+optimagic supports most `scipy` algorithms and scipy is automatically installed when you
+install optimagic.
 
 ```{eval-rst}
 .. dropdown::  scipy_lbfgsb
@@ -43,7 +43,7 @@ install estimagic.
     The lbfgsb algorithm is almost perfectly scale invariant. Thus, it is not necessary
     to scale the parameters.
 
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative improvement
+    - **convergence.ftol_rel** (float): Stop when the relative improvement
       between two iterations is smaller than this. More formally, this is expressed as
 
     .. math::
@@ -52,11 +52,11 @@ install estimagic.
         \text{relative_criterion_tolerance}
 
 
-    - **convergence.absolute_gradient_tolerance** (float): Stop if all elements of the projected
+    - **convergence.gtol_abs** (float): Stop if all elements of the projected
       gradient are smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this as convergence.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached,
       the optimization stops, but we do not count this as convergence.
     - **limited_memory_storage_length** (int): Maximum number of saved gradients used to approximate the hessian matrix.
 
@@ -80,11 +80,11 @@ install estimagic.
     originally implemented by :cite:`Kraft1988`.
 
     .. note::
-        SLSQP's general nonlinear constraints are not supported yet by estimagic.
+        SLSQP's general nonlinear constraints are not supported yet by optimagic.
 
-    - **convergence.absolute_criterion_tolerance** (float): Precision goal for the value of
+    - **convergence.ftol_abs** (float): Precision goal for the value of
       f in the stopping criterion.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached,
       the optimization stops, but we do not count this as convergence.
 
 ```
@@ -109,19 +109,19 @@ install estimagic.
     Its popularity is likely due to historic reasons and much larger than its
     properties warrant.
 
-    The argument `initial_simplex` is not supported by estimagic as it is not
-    compatible with estimagic's handling of constraints.
+    The argument `initial_simplex` is not supported by optimagic as it is not
+    compatible with optimagic's handling of constraints.
 
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached, the optimization stops,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached, the optimization stops,
       but we do not count this as convergence.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function evaluation is reached,
+    - **stopping.maxfun** (int): If the maximum number of function evaluation is reached,
       the optimization stops but we do not count this as convergence.
-    - **convergence.absolute_params_tolerance** (float): Absolute difference in parameters between iterations
+    - **convergence.xtol_abs** (float): Absolute difference in parameters between iterations
       that is tolerated to declare convergence. As no relative tolerances can be passed to Nelder-Mead,
-      estimagic sets a non zero default for this.
-    - **convergence.absolute_criterion_tolerance** (float): Absolute difference in the criterion value between
+      optimagic sets a non zero default for this.
+    - **convergence.ftol_abs** (float): Absolute difference in the criterion value between
       iterations that is tolerated to declare convergence. As no relative tolerances can be passed to Nelder-Mead,
-      estimagic sets a non zero default for this.
+      optimagic sets a non zero default for this.
     - **adaptive** (bool): Adapt algorithm parameters to dimensionality of problem.
       Useful for high-dimensional minimization (:cite:`Gao2012`, p. 259-277). scipy's default is False.
 
@@ -148,12 +148,12 @@ install estimagic.
     bi-directional search in each parameter's dimension.
 
     The argument ``direc``, which is the initial set of direction vectors and which
-    is part of the scipy interface is not supported by estimagic because it is
-    incompatible with how estimagic handles constraints.
+    is part of the scipy interface is not supported by optimagic because it is
+    incompatible with how optimagic handles constraints.
 
-    - **convergence.relative_params_tolerance (float)**: Stop when the relative movement between parameter
+    - **convergence.xtol_rel (float)**: Stop when the relative movement between parameter
       vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative improvement between two
+    - **convergence.ftol_rel** (float): Stop when the relative improvement between two
       iterations is smaller than this. More formally, this is expressed as
 
         .. math::
@@ -161,9 +161,9 @@ install estimagic.
             \frac{(f^k - f^{k+1})}{\\max{{\{|f^k|, |f^{k+1}|, 1\}}}} \leq
             \text{relative_criterion_tolerance}
 
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function evaluation is reached,
+    - **stopping.maxfun** (int): If the maximum number of function evaluation is reached,
       the optimization stops but we do not count thisas convergence.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached, the optimization stops,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached, the optimization stops,
       but we do not count this as convergence.
 
 ```
@@ -184,8 +184,8 @@ install estimagic.
     expansion near an optimum. However, BFGS can have acceptable performance even
     for non-smooth optimization instances.
 
-    - **convergence.absolute_gradient_tolerance** (float): Stop if all elements of the gradient are smaller than this.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached, the optimization stops,
+    - **convergence.gtol_abs** (float): Stop if all elements of the gradient are smaller than this.
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached, the optimization stops,
       but we do not count this as convergence.
     - **norm** (float): Order of the vector norm that is used to calculate the gradient's "score" that
       is compared to the gradient tolerance to determine convergence. Default is infinite which means that
@@ -217,9 +217,9 @@ install estimagic.
       - the gradient is not too large, e.g., has a norm less than 1000.
       - The initial guess is reasonably close to the criterion's global minimizer.
 
-    - **convergence.absolute_gradient_tolerance** (float): Stop if all elements of the
+    - **convergence.gtol_abs** (float): Stop if all elements of the
       gradient are smaller than this.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached,
       the optimization stops, but we do not count this as convergence.
     - **norm** (float): Order of the vector norm that is used to calculate the gradient's
       "score" that is compared to the gradient tolerance to determine convergence.
@@ -266,10 +266,10 @@ install estimagic.
       - the gradient is not too large, e.g., has a norm less than 1000.
       - The initial guess is reasonably close to the criterion's global minimizer.
 
-    - **convergence.relative_params_tolerance** (float): Stop when the relative movement
+    - **convergence.xtol_rel** (float): Stop when the relative movement
       between parameter vectors is smaller than this. Newton CG uses the average
       relative change in the parameters for determining the convergence.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached,
       the optimization stops, but we do not count this as convergence.
 
 
@@ -289,16 +289,16 @@ install estimagic.
   It is derivative-free and supports nonlinear inequality and equality constraints.
 
   .. note::
-      Cobyla's general nonlinear constraints is not supported yet by estimagic.
+      Cobyla's general nonlinear constraints is not supported yet by optimagic.
 
   Scipy's implementation wraps the FORTRAN implementation of the algorithm.
 
   For more information on COBYLA see :cite:`Powell1994`, :cite:`Powell1998` and
   :cite:`Powell2007`.
 
-  - **stopping.max_iterations** (int): If the maximum number of iterations is reached,
+  - **stopping.maxiter** (int): If the maximum number of iterations is reached,
     the optimization stops, but we do not count this as convergence.
-  - **convergence.relative_params_tolerance** (float): Stop when the relative movement
+  - **convergence.xtol_rel** (float): Stop when the relative movement
     between parameter vectors is smaller than this. In case of COBYLA this is
     a lower bound on the size of the trust region and can be seen as the
     required accuracy in the variables but this accuracy is not guaranteed.
@@ -339,25 +339,25 @@ install estimagic.
     - the gradient is not too large, e.g., has a norm less than 1000.
     - The initial guess is reasonably close to the criterion's global minimizer.
 
-    estimagic does not support the ``scale``  nor ``offset`` argument as they are not
-    compatible with the way estimagic handles constraints. It also does not support
+    optimagic does not support the ``scale``  nor ``offset`` argument as they are not
+    compatible with the way optimagic handles constraints. It also does not support
     ``messg_num`` which is an additional way to control the verbosity of the optimizer.
 
     - **func_min_estimate** (float): Minimum function value estimate. Defaults to 0.
-      stopping_max_iterations (int): If the maximum number of iterations is reached,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached,
       the optimization stops, but we do not count this as convergence.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this as
       convergence.
-    - **convergence.absolute_params_tolerance** (float): Absolute difference in parameters
+    - **convergence.xtol_abs** (float): Absolute difference in parameters
       between iterations after scaling that is tolerated to declare convergence.
-    - **convergence.absolute_criterion_tolerance** (float): Absolute difference in the
+    - **convergence.ftol_abs** (float): Absolute difference in the
       criterion value between iterations after scaling that is tolerated
       to declare convergence.
-    - **convergence.absolute_gradient_tolerance** (float): Stop if the value of the
+    - **convergence.gtol_abs** (float): Stop if the value of the
       projected gradient (after applying x scaling factors) is smaller than this.
-      If convergence.absolute_gradient_tolerance < 0.0,
-      convergence.absolute_gradient_tolerance is set to
+      If convergence.gtol_abs < 0.0,
+      convergence.gtol_abs is set to
       1e-2 * sqrt(accuracy).
     - **max_hess_evaluations_per_iteration** (int): Maximum number of hessian*vector
       evaluations per main iteration. If ``max_hess_evaluations == 0``, the
@@ -368,13 +368,13 @@ install estimagic.
       It may be increased during the optimization. If too small, it will be set
       to 10.0. By default we use scipy's default.
     - **line_search_severity** (float): Severity of the line search. If < 0 or > 1,
-      set to 0.25. Estimagic defaults to scipy's default.
+      set to 0.25. optimagic defaults to scipy's default.
     - **finitie_difference_precision** (float): Relative precision for finite difference
       calculations. If <= machine_precision, set to sqrt(machine_precision).
-      Estimagic defaults to scipy's default.
+      optimagic defaults to scipy's default.
     - **criterion_rescale_factor** (float): Scaling factor (in log10) used to trigger
       criterion rescaling. If 0, rescale at each iteration. If a large value,
-      never rescale. If < 0, rescale is set to 1.3. Estimagic defaults to scipy's
+      never rescale. If < 0, rescale is set to 1.3. optimagic defaults to scipy's
       default.
 
 
@@ -396,7 +396,7 @@ install estimagic.
         with another local optimizer.
 
     .. note::
-        Its general nonlinear constraints' handling is not supported yet by estimagic.
+        Its general nonlinear constraints' handling is not supported yet by optimagic.
 
     It switches between two implementations depending on the problem definition.
     It is the most versatile constrained minimization algorithm
@@ -415,19 +415,19 @@ install estimagic.
     It approximates the Hessian using the Broyden-Fletcher-Goldfarb-Shanno (BFGS)
     Hessian update strategy.
 
-    - **convergence.absolute_gradient_tolerance** (float): Tolerance for termination
+    - **convergence.gtol_abs** (float): Tolerance for termination
       by the norm of the Lagrangian gradient. The algorithm will terminate
       when both the infinity norm (i.e., max abs value) of the Lagrangian
       gradient and the constraint violation are smaller than the
-      convergence.absolute_gradient_tolerance.
+      convergence.gtol_abs.
       For this algorithm we use scipy's gradient tolerance for trust_constr.
       This smaller tolerance is needed for the sum of squares tests to pass.
-    - **stopping.max_iterations** (int): If the maximum number of iterations is reached,
+    - **stopping.maxiter** (int): If the maximum number of iterations is reached,
       the optimization stops, but we do not count this as convergence.
-    - **convergence.relative_params_tolerance** (float): Tolerance for termination by
+    - **convergence.xtol_rel** (float): Tolerance for termination by
       the change of the independent variable. The algorithm will terminate when
       the radius of the trust region used in the algorithm is smaller than the
-      convergence.relative_params_tolerance.
+      convergence.xtol_rel.
     - **trustregion.initial_radius** (float): Initial value of the trust region radius.
       The trust radius gives the maximum distance between solution points in
       consecutive iterations. It reflects the trust the algorithm puts in the
@@ -453,11 +453,11 @@ install estimagic.
 
     The algorithm supports the following options:
 
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is below this.
-    - **convergence.relative_gradient_tolerance** (float): Stop when the gradient,
+    - **convergence.gtol_rel** (float): Stop when the gradient,
       divided by the absolute value of the criterion function is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this as
       convergence.
     - **tr_solver** (str): Method for solving trust-region subproblems, relevant only
@@ -495,11 +495,11 @@ install estimagic.
 
     The algorithm supports the following options:
 
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is below this.
-    - **convergence.relative_gradient_tolerance** (float): Stop when the gradient,
+    - **convergence.gtol_rel** (float): Stop when the gradient,
       divided by the absolute value of the criterion function is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this as
       convergence.
     - **tr_solver** (str): Method for solving trust-region subproblems, relevant only
@@ -537,11 +537,11 @@ install estimagic.
 
     The algorithm supports the following options:
 
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is below this.
-    - **convergence.relative_gradient_tolerance** (float): Stop when the gradient,
+    - **convergence.gtol_rel** (float): Stop when the gradient,
       divided by the absolute value of the criterion function is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this as
       convergence.
     - **tr_solver** (str): Method for solving trust-region subproblems, relevant only
@@ -576,9 +576,9 @@ install estimagic.
 
     Basin-hopping is a two-phase method that combines a global stepping algorithm with local minimization at each step. Designed to mimic the natural process of energy minimization of clusters of atoms, it works well for similar problems with “funnel-like, but rugged” energy landscapes.
 
-    This is mainly supported for completeness. Consider estimagic's built in multistart
+    This is mainly supported for completeness. Consider optimagic's built in multistart
     optimization for a similar approach that can run multiple optimizations in parallel,
-    supports all local algorithms in estimagic (as opposed to just those from scipy)
+    supports all local algorithms in optimagic (as opposed to just those from scipy)
     and allows for a better visualization of the multistart history.
 
     When provided the derivative is passed to the local minimization method.
@@ -587,21 +587,28 @@ install estimagic.
 
     - **local_algorithm** (str/callable): Any scipy local minimizer: valid options are.
       "Nelder-Mead". "Powell". "CG". "BFGS". "Newton-CG". "L-BFGS-B". "TNC". "COBYLA".
-    "SLSQP". "trust-constr". "dogleg". "trust-ncg". "trust-exact". "trust-krylov".
-    or a custom function for local minimization, default is "L-BFGS-B".
-    - **n_local_optimizations**: (int) The number local optimizations. Default is 100 as in scipy's default.
-    - **temperature**: (float) Controls the randomness in the optimization process. Higher the temperatures the larger jumps in function value will be accepted. Default is 1.0 as in scipy's default.
+      "SLSQP". "trust-constr". "dogleg". "trust-ncg". "trust-exact". "trust-krylov".
+      or a custom function for local minimization, default is "L-BFGS-B".
+    - **n_local_optimizations**: (int) The number local optimizations. Default is 100 as
+      in scipy's default.
+    - **temperature**: (float) Controls the randomness in the optimization process.
+      Higher the temperatures the larger jumps in function value will be accepted.
+      Default is 1.0 as in scipy's default.
     - **stepsize**: (float) Maximum step size. Default is 0.5 as in scipy's default.
     - **local_algo_options**: (dict) Additional keyword arguments for the local
       minimizer. Check the documentation of the local scipy algorithms for details on
       what is supported.
-    - **take_step**: (callable) Replaces the default step-taking routine. Default is None as in scipy's default.
-    - **accept_test**: (callable) Define a test to judge the acception of steps. Default is None as in scipy's default.
-    - **interval**: (int) Determined how often the step size is updated. Default is 50 as in scipy's default.
+    - **take_step**: (callable) Replaces the default step-taking routine. Default is
+      None as in scipy's default.
+    - **accept_test**: (callable) Define a test to judge the acception of steps. Default
+      is None as in scipy's default.
+    - **interval**: (int) Determined how often the step size is updated. Default is 50
+      as in scipy's default.
     - **convergence.n_unchanged_iterations**: (int) Number of iterations the global
-    minimum estimate stays the same to stops the algorithm. Default is None as in
-    scipy's default.
-    - **seed**: (None, int, numpy.random.Generator,numpy.random.RandomState)Default is None as in scipy's default.
+      minimum estimate stays the same to stops the algorithm. Default is None as in
+      scipy's default.
+    - **seed**: (None, int, numpy.random.Generator,numpy.random.RandomState)Default is
+      None as in scipy's default.
     - **target_accept_rate**: (float) Adjusts the step size. Default is 0.5 as in scipy's default.
     - **stepwise_factor**: (float) Step size multiplier upon each step. Lies between (0,1), default is 0.9 as in scipy's default.
 
@@ -619,7 +626,7 @@ install estimagic.
     Brute force evaluates the criterion at each point and that is why better suited for problems with very few parameters.
 
     The start values are not actually used because the grid is only defined by bounds.
-    It is still necessary for estimagic to infer the number and format of the
+    It is still necessary for optimagic to infer the number and format of the
     parameters.
 
     Due to the parallelization, this algorithm cannot collect a history of parameters
@@ -627,12 +634,15 @@ install estimagic.
 
     The algorithm supports the following options:
 
-    - **n_grid_points** (int):  the number of grid points to use for the brute force search. Default is 20 as in scipy.
-    - **polishing_function** (callable):  Function to seek a more precise minimum near brute-force' best gridpoint taking brute-force's result at initial guess as a positional argument. Default is None providing no polishing.
+    - **n_grid_points** (int):  the number of grid points to use for the brute force
+      search. Default is 20 as in scipy.
+    - **polishing_function** (callable):  Function to seek a more precise minimum near
+      brute-force' best gridpoint taking brute-force's result at initial guess as a
+      positional argument. Default is None providing no polishing.
     - **n_cores** (int): The number of cores on which the function is evaluated in
-    parallel. Default 1.
-    - **batch_evaluator** (str or callable). An estimagic batch evaluator. Default
-    'joblib'.
+      parallel. Default 1.
+    - **batch_evaluator** (str or callable). An optimagic batch evaluator. Default
+      'joblib'.
 
 ```
 
@@ -645,12 +655,13 @@ install estimagic.
 
     Find the global minimum of a multivariate function using differential evolution (DE). DE is a gradient-free method.
 
-    Due to estimagic's general parameter format the integrality and vectorized
+    Due to optimagic's general parameter format the integrality and vectorized
     arguments are not supported.
 
     The algorithm supports the following options:
 
-    - **strategy** (str): Measure of quality to improve a candidate solution, can be one of the following keywords
+    - **strategy** (str): Measure of quality to improve a candidate solution, can be one
+      of the following keywords (default 'best1bin'.)
       - ‘best1bin’
       - ‘best1exp’
       - ‘rand1exp’
@@ -663,25 +674,40 @@ install estimagic.
       - ‘best2bin’
       - ‘rand2bin’
       - ‘rand1bin’
-    ,default is 'best1bin'.
-    - **stopping.max_iterations** (int): The maximum number of criterion evaluations without polishing is(stopping.max_iterations + 1) * population_size * number of parameters)
-    - **population_size_multiplier** (int): A multiplier setting the population size. The number of individuals in the population is population_size * number of parameters. The default 15.
-    - **convergence.relative_criterion_tolerance** (float): Default 0.01.
-    - **mutation_constant** (float/tuple): The differential weight denoted by F in literature. Should be within 0 and 2.  The tuple form is used to specify (min, max) dithering which can help speed convergence.  Default is (0.5, 1).
-    - **recombination_constant** (float): The crossover probability or CR in the literature determines the probability that two solution vectors will be combined to produce a new solution vector. Should be between 0 and 1. The default is 0.7.
+
+    - **stopping.maxiter** (int): The maximum number of criterion evaluations
+      without polishing is(stopping.maxiter + 1) * population_size * number of
+      parameters
+    - **population_size_multiplier** (int): A multiplier setting the population size.
+      The number of individuals in the population is population_size * number of
+      parameters. The default 15.
+    - **convergence.ftol_rel** (float): Default 0.01.
+    - **mutation_constant** (float/tuple): The differential weight denoted by F in
+      literature. Should be within 0 and 2.  The tuple form is used to specify
+      (min, max) dithering which can help speed convergence.  Default is (0.5, 1).
+    - **recombination_constant** (float): The crossover probability or CR in the
+      literature determines the probability that two solution vectors will be combined
+      to produce a new solution vector. Should be between 0 and 1. The default is 0.7.
     - **seed** (int): DE is stochastic. Define a seed for reproducability.
-    - **polish** (bool): Uses scipy's L-BFGS-B for unconstrained problems and trust-constr for constrained problems to slightly improve the minimization. Default is True.
-    - **sampling_method** (str/np.array): Specify the sampling method for the initial population. It can be one of the following options
-       - "latinhypercube"
-       - "sobol"
-       - "halton"
-       - "random"
-       - an array specifying the initial population of shape (total population size, number of parameters). The initial population is clipped to bounds before use. Default is 'latinhypercube'
-    - **convergence.absolute_criterion_tolerance** (float): CONVERGENCE_SECOND_BEST_ABSOLUTE_CRITERION_TOLERANCE
+    - **polish** (bool): Uses scipy's L-BFGS-B for unconstrained problems and
+      trust-constr for constrained problems to slightly improve the minimization.
+      Default is True.
+    - **sampling_method** (str/np.array): Specify the sampling method for the initial
+      population. It can be one of the following options
+      - "latinhypercube"
+      - "sobol"
+      - "halton"
+      - "random"
+      - an array specifying the initial population of shape (total population size,
+      number of parameters). The initial population is clipped to bounds before use.
+      Default is 'latinhypercube'
+
+    - **convergence.ftol_abs** (float):
+      CONVERGENCE_SECOND_BEST_ABSOLUTE_CRITERION_TOLERANCE
     - **n_cores** (int): The number of cores on which the function is evaluated in
-    parallel. Default 1.
-    - **batch_evaluator** (str or callable). An estimagic batch evaluator. Default
-    'joblib'.
+      parallel. Default 1.
+    - **batch_evaluator** (str or callable). An optimagic batch evaluator. Default
+      'joblib'.
 
 ```
 
@@ -697,29 +723,40 @@ install estimagic.
     The algorithm supports the following options:
 
     - **local_algorithm** (str): The local optimization algorithm to be used. Only
-    COBYLA and SLSQP supports constraints. Valid options are
-    "Nelder-Mead". "Powell". "CG". "BFGS". "Newton-CG". "L-BFGS-B". "TNC". "COBYLA".
-    "SLSQP". "trust-constr". "dogleg". "trust-ncg". "trust-exact". "trust-krylov"
-    or a custom function for local minimization, default is "L-BFGS-B".
+      COBYLA and SLSQP supports constraints. Valid options are
+      "Nelder-Mead". "Powell". "CG". "BFGS". "Newton-CG". "L-BFGS-B". "TNC". "COBYLA".
+      "SLSQP". "trust-constr". "dogleg". "trust-ncg". "trust-exact". "trust-krylov"
+      or a custom function for local minimization, default is "L-BFGS-B".
     - **local_algo_options**: (dict) Additional keyword arguments for the local
       minimizer. Check the documentation of the local scipy algorithms for details on
       what is supported.
-    - **n_sampling_points** (int): Specify the number of sampling points to construct the simplical complex.
-    - **n_simplex_iterations** (int): Number of iterations to construct the simplical complex. Default is 1 as in scipy.
-    - **sampling_method** (str/callable): The method to use for sampling the search space. Default 'simplicial'.
-    - **max_sampling_evaluations** (int): The maximum number of evaluations of the criterion function in the sampling phase.
-    - **convergence.minimum_criterion_value** (float): Specify the global minimum when it is known. Default is - **np.inf. For maximization problems, flip the sign.
-    - **convergence.minimum_criterion_tolerance** (float): Specify the relative error between the current best minimum and the supplied global criterion_minimum allowed. Default is scipy's default, 1e-4.
-    - **stopping.max_iterations** (int): The maximum number of iterations.
-    - **stopping.max_criterion_evaluations** (int): The maximum number of criterion
-    evaluations.
-    - **stopping.max_processing_time** (int): The maximum time allowed for the optimization.
-    - **minimum_homology_group_rank_differential** (int): The minimum difference in the rank of the homology group between iterations.
+    - **n_sampling_points** (int): Specify the number of sampling points to construct
+      the simplical complex.
+    - **n_simplex_iterations** (int): Number of iterations to construct the simplical
+      complex. Default is 1 as in scipy.
+    - **sampling_method** (str/callable): The method to use for sampling the search
+      space. Default 'simplicial'.
+    - **max_sampling_evaluations** (int): The maximum number of evaluations of the
+      criterion function in the sampling phase.
+    - **convergence.minimum_criterion_value** (float): Specify the global minimum when
+      it is known. Default is - np.inf. For maximization problems, flip the sign.
+    - **convergence.minimum_criterion_tolerance** (float): Specify the relative error
+      between the current best minimum and the supplied global criterion_minimum
+      allowed. Default is scipy's default, 1e-4.
+    - **stopping.maxiter** (int): The maximum number of iterations.
+    - **stopping.maxfun** (int): The maximum number of criterion
+      evaluations.
+    - **stopping.max_processing_time** (int): The maximum time allowed for the
+      optimization.
+    - **minimum_homology_group_rank_differential** (int): The minimum difference in the
+      rank of the homology group between iterations.
     - **symmetry** (bool): Specify whether the criterion contains symetric variables.
-    - **minimize_every_iteration** ()bool: Specify whether the gloabal sampling points are passed to the local algorithm in every iteration.
+    - **minimize_every_iteration** (bool): Specify whether the gloabal sampling points
+      are passed to the local algorithm in every iteration.
     - **max_local_minimizations_per_iteration** (int): The maximum number of local
-    optimizations per iteration. Default False, i.e. no limit.
-    - **infinity_constraints** (bool): Specify whether to save the sampling points outside the feasible domain. Default is True.
+      optimizations per iteration. Default False, i.e. no limit.
+    - **infinity_constraints** (bool): Specify whether to save the sampling points
+      outside the feasible domain. Default is True.
 
 ```
 
@@ -734,11 +771,12 @@ install estimagic.
 
     The algorithm supports the following options:
 
-    - **stopping.max_iterations** (int): Specify the maximum number of global searh iterations.
+    - **stopping.maxiter** (int): Specify the maximum number of global searh
+      iterations.
     - **local_algorithm** (str): The local optimization algorithm to be used. valid
-    options are. "Nelder-Mead". "Powell". "CG". "BFGS". "Newton-CG". "L-BFGS-B". "TNC".
-    "COBYLA". "SLSQP". "trust-constr". "dogleg". "trust-ncg". "trust-exact".
-    "trust-krylov". Default "L-BFGS-B".
+      options are: "Nelder-Mead", "Powell", "CG", "BFGS", "Newton-CG", "L-BFGS-B",
+      "TNC", "COBYLA", "SLSQP", "trust-constr", "dogleg", "trust-ncg", "trust-exact",
+      "trust-krylov", Default "L-BFGS-B".
     - **local_algo_options**: (dict) Additional keyword arguments for the local
       minimizer. Check the documentation of the local scipy algorithms for details on
       what is supported.
@@ -746,9 +784,9 @@ install estimagic.
     - **restart_temperature_ratio** (float): Reanneling starts when the algorithm is decreased to initial_temperature * restart_temperature_ratio. Default is 2e-05.
     - **visit** (float): Specify the thickness of visiting distribution's tails. Range is (1, 3] and default is scipy's default, 2.62.
     - **accept** (float): Controls the probability of acceptance. Range is (-1e4, -5] and default is scipy's default, -5.0. Smaller values lead to lower acceptance probability.
-    - **stopping.max_criterion_evaluations** (int): soft limit for the number of criterion evaluations.
+    - **stopping.maxfun** (int): soft limit for the number of criterion evaluations.
     - **seed** (int, None or RNG): Dual annealing is a stochastic process. Seed or
-    random number generator. Default None.
+      random number generator. Default None.
     - **no_local_search** (bool): Specify whether to apply a traditional Generalized Simulated Annealing with no local search. Default is False.
 
 ```
@@ -765,10 +803,10 @@ install estimagic.
     The algorithm supports the following options:
 
     - **eps** (float): Specify the minimum difference of the criterion values between the current best hyperrectangle and the next potentially best hyperrectangle to be divided determining the trade off between global and local search. Default is 1e-6 differing from scipy's default 1e-4.
-    - **stopping_max_criterion_evaluations** (int/None): Maximum number of criterion evaluations allowed. Default is None which caps the number of evaluations at 1000 * number of dimentions automatically.
-    - **stopping_max_iterations** (int): Maximum number of iterations allowed.
+    - **stopping.maxfun** (int/None): Maximum number of criterion evaluations allowed. Default is None which caps the number of evaluations at 1000 * number of dimentions automatically.
+    - **stopping.maxiter** (int): Maximum number of iterations allowed.
     - **locally_biased** (bool): Determine whether to use the locally biased variant of the algorithm DIRECT_L. Default is True.
-    - **convergence.minimum_criterion_value** (float): Specify the global minimum when it is known. Default is - **np.inf. For maximization problems, flip the sign.
+    - **convergence.minimum_criterion_value** (float): Specify the global minimum when it is known. Default is minus infinity. For maximization problems, flip the sign.
     - **convergence.minimum_criterion_tolerance** (float): Specify the relative error between the current best minimum and the supplied global criterion_minimum allowed. Default is scipy's default, 1e-4.
     - **volume_hyperrectangle_tolerance** (float): Specify the smallest volume of the hyperrectangle containing the lowest criterion value allowed. Range is (0,1). Default is 1e-16.
     - **length_hyperrectangle_tolerance** (float): Depending on locally_biased it can refer to normalized side (True) or diagonal (False) length of the hyperrectangle containing the lowest criterion value. Range is (0,1). Default is scipy's default, 1e-6.
@@ -803,9 +841,9 @@ We implement a few algorithms from scratch. They are currently considered experi
 
     bhhh supports the following options:
 
-    - **convergence_absolute_gradient_tolerance** (float): Stopping criterion for the
+    - **convergence.gtol_abs** (float): Stopping criterion for the
       gradient tolerance. Default is 1e-8.
-    - **stopping_max_iterations** (int): Maximum number of iterations.
+    - **stopping.maxiter** (int): Maximum number of iterations.
       If reached, terminate. Default is 200.
 
 ```
@@ -836,14 +874,14 @@ We implement a few algorithms from scratch. They are currently considered experi
     - **adaptive** (bool): Adjust parameters of Nelder-Mead algorithm to account
       for simplex size. The default is True.
 
-    - **stopping.max_iterations** (int): Maximum number of algorithm iterations.
+    - **stopping.maxiter** (int): Maximum number of algorithm iterations.
       The default is STOPPING_MAX_ITERATIONS.
 
-    - **convergence.absolute_criterion_tolerance** (float): maximal difference between
+    - **convergence.ftol_abs** (float): maximal difference between
       function value evaluated on simplex points.
       The default is CONVERGENCE_SECOND_BEST_ABSOLUTE_CRITERION_TOLERANCE.
 
-    - **convergence.absolute_params_tolerance** (float): maximal distance between points
+    - **convergence.xtol_abs** (float): maximal distance between points
       in the simplex. The default is CONVERGENCE_SECOND_BEST_ABSOLUTE_PARAMS_TOLERANCE.
 
     - **batch_evaluator** (string or callable): See :ref:`batch_evaluators` for
@@ -883,19 +921,19 @@ We implement a few algorithms from scratch. They are currently considered experi
     pounders supports the following options:
 
 
-    - **convergence_absolute_gradient_tolerance**: Convergence tolerance for the
+    - **convergence.gtol_abs**: Convergence tolerance for the
       absolute gradient norm. Stop if norm of the gradient is less than this.
       Default is 1e-8.
-    - **convergence_relative_gradient_tolerance**: Convergence tolerance for the
+    - **convergence.gtol_rel**: Convergence tolerance for the
       relative gradient norm. Stop if norm of the gradient relative to the criterion
       value is less than this. Default is 1-8.
-    - **convergence_scaled_gradient_tolerance**: Convergence tolerance for the
+    - **convergence.gtol_scaled**: Convergence tolerance for the
       scaled gradient norm. Stop if norm of the gradient divided by norm of the
       gradient at the initial parameters is less than this.
       Disabled, i.e. set to False, by default.
     - **max_interpolation_points** (int): Maximum number of interpolation points.
       Default is `2 * n + 1`, where `n` is the length of the parameter vector.
-    - **stopping_max_iterations** (int): Maximum number of iterations.
+    - **stopping.maxiter** (int): Maximum number of iterations.
       If reached, terminate. Default is 2000.
     - **trustregion_initial_radius (float)**: Delta, initial trust-region radius.
       0.1 by default.
@@ -946,7 +984,7 @@ We implement a few algorithms from scratch. They are currently considered experi
       None of the dictionary keys need to be specified by default, but can be.
     - **batch_evaluator** (str or callable): Name of a pre-implemented batch evaluator
       (currently "joblib" and "pathos_mp") or callable with the same interface
-      as the estimagic batch_evaluators. Default is "joblib".
+      as the optimagic batch_evaluators. Default is "joblib".
     - **n_cores (int)**: Number of processes used to parallelize the function
       evaluations. Default is 1.
 
@@ -1014,17 +1052,17 @@ need to have [petsc4py](https://pypi.org/project/petsc4py/) installed.
 
         \frac{||g(X)||}{||g(X0)||} < \epsilon
 
-    - **convergence.absolute_gradient_tolerance** (float): Stop if norm of gradient is less than this.
-      If set to False the algorithm will not consider convergence.absolute_gradient_tolerance.
-    - **convergence.relative_gradient_tolerance** (float): Stop if relative norm of gradient is less
+    - **convergence.gtol_abs** (float): Stop if norm of gradient is less than this.
+      If set to False the algorithm will not consider convergence.gtol_abs.
+    - **convergence.gtol_rel** (float): Stop if relative norm of gradient is less
       than this. If set to False the algorithm will not consider
-      convergence.relative_gradient_tolerance.
+      convergence.gtol_rel.
     - **convergence.scaled_gradient_tolerance** (float): Stop if scaled norm of gradient is smaller
       than this. If set to False the algorithm will not consider
       convergence.scaled_gradient_tolerance.
     - **trustregion.initial_radius** (float): Initial value of the trust region radius.
       It must be :math:`> 0`.
-    - **stopping.max_iterations** (int): Alternative Stopping criterion.
+    - **stopping.maxiter** (int): Alternative Stopping criterion.
       If set the routine will stop after the number of specified iterations or
       after the step size is sufficiently small. If the variable is set the
       default criteria will all be ignored.
@@ -1053,14 +1091,14 @@ install each of them separately:
 
     The DFO-LS algorithm :cite:`Cartis2018b` is designed to solve the nonlinear
     least-squares minimization problem (with optional bound constraints).
-    Remember to cite :cite:`Cartis2018b` when using DF-OLS in addition to estimagic.
+    Remember to cite :cite:`Cartis2018b` when using DF-OLS in addition to optimagic.
 
     .. math::
 
         \min_{x\in\mathbb{R}^n}  &\quad  f(x) := \sum_{i=1}^{m}r_{i}(x)^2 \\
         \text{s.t.} &\quad  \text{lower_bounds} \leq x \leq \text{upper_bounds}
 
-    The :math:`r_{i}` are called root contributions in estimagic.
+    The :math:`r_{i}` are called root contributions in optimagic.
 
     DFO-LS is a derivative-free optimization algorithm, which means it does not require
     the user to provide the derivatives of f(x) or :math:`r_{i}(x)`, nor does it
@@ -1098,7 +1136,7 @@ install each of them separately:
     3. when a sufficient reduction to the criterion value at the start parameters
        has been reached, i.e. when
        :math:`\frac{f(x)}{f(x_0)} \leq
-       \text{convergence.scaled_criterion_tolerance}`
+       \text{convergence.ftol_scaled}`
 
     4. when all evaluations on the interpolation points fall within a scaled version of
        the noise level of the criterion function. This is only applicable if the
@@ -1123,11 +1161,11 @@ install each of them separately:
       .. warning::
           Very small values, as in most other tolerances don't make sense here.
 
-    - **convergence.scaled_criterion_tolerance** (float):
+    - **convergence.ftol_scaled** (float):
       Terminate if a point is reached where the ratio of the criterion value
       to the criterion value at the start params is below this value, i.e. if
       :math:`f(x_k)/f(x_0) \leq
-      \text{convergence.scaled_criterion_tolerance}`. Note this is
+      \text{convergence.ftol_scaled}`. Note this is
       deactivated unless the lowest mathematically possible criterion value (0.0)
       is actually achieved.
     - **convergence.slow_progress** (dict): Arguments for converging when the evaluations
@@ -1155,7 +1193,7 @@ install each of them separately:
       Default is no averaging (i.e.
       ``noise_n_evals_per_point(...) = 1``).
     - **random_directions_orthogonal** (bool): see :ref:`algo_options`.
-    - **stopping.max_criterion_evaluations** (int): see :ref:`algo_options`.
+    - **stopping.maxfun** (int): see :ref:`algo_options`.
     - **threshold_for_safety_step** (float): see :ref:`algo_options`.
     - **trustregion.expansion_factor_successful** (float): see :ref:`algo_options`.
     - **trustregion.expansion_factor_very_successful** (float): see :ref:`algo_options`.
@@ -1196,7 +1234,7 @@ install each of them separately:
     minimization problems.
 
     Remember to cite :cite:`Powell2009` and :cite:`Cartis2018` when using pybobyqa in
-    addition to estimagic. If you take advantage of the ``seek_global_optimum`` option,
+    addition to optimagic. If you take advantage of the ``seek_global_optimum`` option,
     cite :cite:`Cartis2018a` additionally.
 
     There are two main situations when using a derivative-free algorithm like BOBYQA
@@ -1272,7 +1310,7 @@ install each of them separately:
     - **seek_global_optimum** (bool): whether to apply the heuristic to escape local
       minima presented in :cite:`Cartis2018a`. Only applies for noisy criterion
       functions.
-    - **stopping.max_criterion_evaluations** (int): see :ref:`algo_options`.
+    - **stopping.maxfun** (int): see :ref:`algo_options`.
     - **threshold_for_safety_step** (float): see :ref:`algo_options`.
     - **trustregion.expansion_factor_successful** (float): see :ref:`algo_options`.
     - **trustregion.expansion_factor_very_successful** (float): see :ref:`algo_options`.
@@ -1306,7 +1344,7 @@ install each of them separately:
 
 ## PYGMO2 Optimizers
 
-Please cite {cite}`Biscani2020` in addition to estimagic when using pygmo. estimagic
+Please cite {cite}`Biscani2020` in addition to optimagic when using pygmo. optimagic
 supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
 
 ```{eval-rst}
@@ -1341,7 +1379,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       number of parameters but at least 64.
     - **batch_evaluator** (str or Callable): Name of a pre-implemented batch
       evaluator (currently 'joblib' and 'pathos_mp') or Callable with the same
-      interface as the estimagic batch_evaluators. See :ref:`batch_evaluators`.
+      interface as the optimagic batch_evaluators. See :ref:`batch_evaluators`.
     - **n_cores** (int): Number of cores to use.
     - **seed** (int): seed used by the internal random number generator.
     - **discard_start_params** (bool): If True, the start params are not guaranteed
@@ -1349,7 +1387,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       evaluation that cannot be done in parallel with other evaluations. Default
       False.
 
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **kernel_size** (int): Number of solutions stored in the solution archive.
     - **speed_parameter_q** (float): This parameter manages the convergence speed
       towards the found minima (the smaller the faster). In the pygmo
@@ -1361,7 +1399,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       function's values distances.
     - **threshold** (int): when the iteration counter reaches the threshold the
       convergence speed is set to 0.01 automatically. To deactivate this effect
-      set the threshold to stopping.max_iterations which is the largest allowed
+      set the threshold to stopping.maxiter which is the largest allowed
       value.
     - **speed_of_std_values_convergence** (int): parameter that determines the
       convergence speed of the standard deviations. This must be an integer
@@ -1369,7 +1407,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **stopping.max_n_without_improvements** (int): if a positive integer is
       assigned here, the algorithm will count the runs without improvements, if
       this number exceeds the given value, the algorithm will be stopped.
-    - **stopping.max_criterion_evaluations** (int): maximum number of function
+    - **stopping.maxfun** (int): maximum number of function
       evaluations.
     - **focus** (float): this parameter makes the search for the optimum greedier
       and more focused on local improvements (the higher the greedier). If the
@@ -1393,7 +1431,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     in :cite:`Mernik2015`. The algorithm is only suited for bounded parameter
     spaces.
 
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **seed** (int): seed used by the internal random number generator.
     - **discard_start_params** (bool): If True, the start params are not guaranteed
       to be part of the initial population. This saves one criterion function
@@ -1425,7 +1463,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       to be part of the initial population. This saves one criterion function
       evaluation that cannot be done in parallel with other evaluations. Default
       False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **weight_coefficient** (float): Weight coefficient. It is denoted by $F$ in
       the main paper and must lie in [0, 2]. It controls the amplification of
       the differential variation $(x_{r_2, G} - x_{r_3, G})$.
@@ -1446,7 +1484,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **convergence.criterion_tolerance**: stopping criteria on the criterion
       tolerance. Default is 1e-6. It is not clear whether this is the absolute
       or relative criterion tolerance.
-    - **convergence.relative_params_tolerance**: stopping criteria on the x
+    - **convergence.xtol_rel**: stopping criteria on the x
       tolerance. In pygmo the default is 1e-6 but we use our default value of
       1e-5.
 ```
@@ -1475,7 +1513,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): number of generations to consider. Each generation
+    - **stopping.maxiter** (int): number of generations to consider. Each generation
       will compute the objective function once.
 
 ```
@@ -1500,7 +1538,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **crossover_probability** (float): Crossover probability.
     - **crossover_strategy** (str): the crossover strategy. One of “exponential”,“binomial”,
       “single” or “sbx”. Default is "exponential".
@@ -1549,7 +1587,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       cannot be done in parallel with other evaluations. Default False.
     - jde (bool): Whether to use the jDE self-adaptation variant to control the $F$ and
       $CR$ parameter. If True jDE is used, else iDE.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **mutation_variant** (int or str): code for the mutation variant to create a new
       candidate individual. The default is "rand/1/exp". The first ten are the
       classical mutation variants introduced in the orginal DE algorithm, the remaining
@@ -1594,9 +1632,9 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
 
     CMA-ES is one of the most successful algorithm, classified as an Evolutionary
     Strategy, for derivative-free global optimization. The version supported by
-    estimagic is the version described in :cite:`Hansen2006`.
+    optimagic is the version described in :cite:`Hansen2006`.
 
-    In contrast to the pygmo version, estimagic always sets force_bounds to True. This
+    In contrast to the pygmo version, optimagic always sets force_bounds to True. This
     avoids that ill defined parameter values are evaluated.
 
     - **population_size** (int): Size of the population. If None, it's twice the number of
@@ -1606,7 +1644,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
 
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **backward_horizon** (float): backward time horizon for the evolution path. It must
       lie betwen 0 and 1.
     - **variance_loss_compensation** (float): makes partly up for the small variance loss in
@@ -1692,7 +1730,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
 
     - **omega** (float): depending on the variant chosen, :math:`\omega` is the particles'
       inertia weight or the construction coefficient. It must lie between 0 and 1.
@@ -1758,13 +1796,13 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       parameters but at least 10.
     - **batch_evaluator (str or Callable)**: Name of a pre-implemented batch evaluator
       (currently 'joblib' and 'pathos_mp') or Callable with the same interface as the
-      estimagic batch_evaluators. See :ref:`batch_evaluators`.
+      optimagic batch_evaluators. See :ref:`batch_evaluators`.
     - **n_cores** (int): Number of cores to use.
     - **seed** (int): seed used by the internal random number generator.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
 
     - **omega** (float): depending on the variant chosen, :math:`\omega` is the particles'
       inertia weight or the constructuion coefficient. It must lie between 0 and 1.
@@ -1869,7 +1907,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
 
     - **learning_rate_mean_update** (float): learning rate for the mean update
       (:math:`\eta_\mu`). It must be between 0 and 1 or None.
@@ -1895,7 +1933,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     Minimize a scalar function usinng the Grey Wolf Optimizer.
 
     The grey wolf optimizer was proposed by :cite:`Mirjalili2014`. The pygmo
-    implementation that is wrapped by estimagic is pased on the pseudo code provided in
+    implementation that is wrapped by optimagic is pased on the pseudo code provided in
     that paper.
 
     This algorithm is a classic example of a highly criticizable line of search that led
@@ -1914,7 +1952,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
 
 ```
 
@@ -1937,7 +1975,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_criterion_evaluations** (int): maximum number of function evaluations.
+    - **stopping.maxfun** (int): maximum number of function evaluations.
     - **start_range** (float): the start range. Must be in (0, 1].
     - **stop_range** (float): the stop range. Must be in (0, start_range].
     - **reduction_coeff** (float): the range reduction coefficient. Must be in (0, 1).
@@ -1961,7 +1999,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
     - **discard_start_params** (bool): If True, the start params are not guaranteed to be
       part of the initial population. This saves one criterion function evaluation that
       cannot be done in parallel with other evaluations. Default False.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **choose_from_memory_probability** (float): probability of choosing from memory
       (similar to a crossover probability).
     - **min_pitch_adjustment_rate** (float): minimum pitch adjustment rate. (similar to a
@@ -1994,7 +2032,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
       cannot be done in parallel with other evaluations. Default False.
     - **jde** (bool): Whether to use the jDE self-adaptation variant to control the $F$ and
       $CR$ parameter. If True jDE is used, else iDE.
-    - **stopping.max_iterations** (int): Number of generations to evolve.
+    - **stopping.maxiter** (int): Number of generations to evolve.
     - **allowed_variants** (array-like object): allowed mutation variants (can be codes
       or strings). Each code refers to one mutation variant to create a new candidate
       individual. The first ten refer to the classical mutation variants introduced in
@@ -2033,7 +2071,7 @@ supports the following [pygmo2](https://esa.github.io/pygmo2) optimizers.
 
 ## The Interior Point Optimizer (ipopt)
 
-estimagic's support for the Interior Point Optimizer ({cite}`Waechter2005`,
+optimagic's support for the Interior Point Optimizer ({cite}`Waechter2005`,
 {cite}`Waechter2005a`, {cite}`Waechter2005b`, {cite}`Nocedal2009`) is built on
 [cyipopt](https://cyipopt.readthedocs.io/en/latest/index.html), a Python wrapper for the
 [Ipopt optimization package](https://coin-or.github.io/Ipopt/index.html).
@@ -2073,13 +2111,13 @@ To use ipopt, you need to have
     ipopt accepts a Python `None`.
 
     The following options are not supported:
-      - `num_linear_variables`: since estimagic may reparametrize your problem
+      - `num_linear_variables`: since optimagic may reparametrize your problem
         and this changes the parameter problem, we do not support this option.
       - derivative checks
-      - print options. Use estimagic's dashboard to monitor your optimization.
+      - print options.
 
 
-    - **convergence.relative_criterion_tolerance** (float): The algorithm
+    - **convergence.ftol_rel** (float): The algorithm
       terminates successfully, if the (scaled) non linear programming error
       becomes smaller than this value.
 
@@ -2095,7 +2133,7 @@ To use ipopt, you need to have
 
     - **s_max** (float): Scaling threshold for the NLP error.
 
-    - **stopping.max_iterations** (int):  If the maximum number of iterations is
+    - **stopping.maxiter** (int):  If the maximum number of iterations is
       reached, the optimization stops, but we do not count this as successful
       convergence. The difference to ``max_criterion_evaluations`` is that one
       iteration might need several criterion evaluations, for example in a line
@@ -3237,7 +3275,7 @@ To use ipopt, you need to have
 
 ## The Fides Optimizer
 
-estimagic supports the
+optimagic supports the
 [Fides Optimizer](https://fides-optimizer.readthedocs.io/en/latest). To use Fides, you
 need to have [the fides package](https://github.com/fides-dev/fides) installed
 (`pip install fides>=0.7.4`, make sure you have at least 0.7.1).
@@ -3262,7 +3300,7 @@ need to have [the fides package](https://github.com/fides-dev/fides) installed
   - **hessian_update_strategy** (str): Hessian Update Strategy to employ. You can provide
     a lowercase or uppercase string or a
     fides.hession_approximation.HessianApproximation class instance. FX, SSM, TSSM and
-    GNSBFGS are not supported by estimagic. The available update strategies are:
+    GNSBFGS are not supported by optimagic. The available update strategies are:
 
       - **bb**: Broydens "bad" method as introduced :cite:`Broyden1965`.
       - **bfgs**: Broyden-Fletcher-Goldfarb-Shanno update strategy.
@@ -3277,28 +3315,28 @@ need to have [the fides package](https://github.com/fides-dev/fides) installed
       - **sr1**: Symmetric Rank 1 update strategy as described in :cite:`Nocedal1999`,
         Chapter 6.2.
 
-  - **convergence.absolute_criterion_tolerance** (float): absolute convergence criterion
+  - **convergence.ftol_abs** (float): absolute convergence criterion
     tolerance. This is only the interpretation of this parameter if the relative
     criterion tolerance is set to 0. Denoting the absolute criterion tolerance by
     :math:`\alpha` and the relative criterion tolerance by :math:`\beta`, the
     convergence condition on the criterion improvement is
     :math:`|f(x_k) - f(x_{k-1})| < \alpha + \beta \cdot |f(x_{k-1})|`
-  - **convergence.relative_criterion_tolerance** (float): relative convergence criterion
+  - **convergence.ftol_rel** (float): relative convergence criterion
     tolerance. This is only the interpretation of this parameter if the absolute
     criterion tolerance is set to 0 (as is the default). Denoting the absolute
     criterion tolerance by :math:`\alpha` and the relative criterion tolerance by
     :math:`\beta`, the convergence condition on the criterion improvement is
     :math:`|f(x_k) - f(x_{k-1})| < \alpha + \beta \cdot |f(x_{k-1})|`
-  - **convergence.absolute_params_tolerance** (float): The optimization terminates
+  - **convergence.xtol_abs** (float): The optimization terminates
     successfully when the step size falls below this number, i.e. when
     :math:`||x_{k+1} - x_k||` is smaller than this tolerance.
-  - **convergence.absolute_gradient_tolerance** (float): The optimization terminates
+  - **convergence.gtol_abs** (float): The optimization terminates
     successfully when the gradient norm is less or equal than this tolerance.
-  - **convergence.relative_gradient_tolerance** (float): The optimization terminates
+  - **convergence.gtol_rel** (float): The optimization terminates
     successfully when the norm of the gradient divided by the absolute function value
     is less or equal to this tolerance.
 
-  - **stopping.max_iterations** (int): maximum number of allowed iterations.
+  - **stopping.maxiter** (int): maximum number of allowed iterations.
   - **stopping.max_seconds** (int): maximum number of walltime seconds, deactivated by
     default.
 
@@ -3347,10 +3385,10 @@ need to have [the fides package](https://github.com/fides-dev/fides) installed
 
 ## The NLOPT Optimizers (nlopt)
 
-estimagic supports the following [NLOPT](https://nlopt.readthedocs.io/en/latest/)
+optimagic supports the following [NLOPT](https://nlopt.readthedocs.io/en/latest/)
 algorithms. Please add the
 [appropriate citations](https://nlopt.readthedocs.io/en/latest/Citing_NLopt/) in
-addition to estimagic when using an NLOPT algorithm. To install nlopt run
+addition to optimagic when using an NLOPT algorithm. To install nlopt run
 `conda install nlopt`.
 
 ```{eval-rst}
@@ -3371,15 +3409,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
 
     For details see :cite:`Powell2009`.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3399,15 +3437,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     that the nlopt version supports bounds. This is done by moving all new points that
     would lie outside the bounds exactly on the bounds.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3443,15 +3481,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     In case of bounded constraints, this method is dominated by `nlopt_bobyqa`
     and `nlopt_cobyla`.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 
@@ -3486,15 +3524,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     - Supports unequal initial-step sizes in the different parameters.
 
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3518,15 +3556,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     of Rowan, is that it explicitly supports bound constraints providing big
     improvement in the case where the optimum lies against one of the constraints.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3553,15 +3591,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     `NEWUOA` requires the dimension n of the parameter space to be `≥ 2`, i.e. the
     implementation does not handle one-dimensional optimization problems.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3585,15 +3623,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
 
     Detailed description of algorithms is given in :cite:`Dembo1983`.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3617,15 +3655,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
 
     Detailed description of algorithms is given in :cite:`Nocedal1989`, :cite:`Nocedal1980`.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3649,15 +3687,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
 
     The implementation is based on CCSA algorithm described in :cite:`Svanberg2002`.
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3681,15 +3719,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     verge to a local optimum from any feasible starting point.
 
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3710,15 +3748,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     Detailed explanation of the algorithm, including its two variations of  rank-2 and
     rank-1 methods can be found in the following paper :cite:`Vlcek2006` .
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
     - **rank_1_update** (bool): Whether I rank-1 or rank-2 update is used.
@@ -3740,15 +3778,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     The implementation is based on the procedure described in :cite:`Kraft1988`
     and :cite:`Kraft1994` .
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3785,15 +3823,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     - "DIRECT_L_RAND_NOSCAL"
     - "DIRECT_RAND"
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
     - **locally_biased** (bool): Whether the "L" version of the algorithm is selected.
@@ -3816,15 +3854,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     More information on this method can be found in
     :cite:`DaSilva2010` , :cite:`DaSilva2010a` , :cite:`Beyer2002`  and :cite:`Vent1975` .
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this
       as convergence.
 ```
@@ -3847,15 +3885,15 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     :cite:`PhilipRunarsson2005` and :cite:`Thomas2000` .
 
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative
+    - **convergence.xtol_rel** (float):  Stop when the relative
       movement between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute
+    - **convergence.xtol_abs** (float): Stop when the absolute
       movement between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of
+    - **convergence.ftol_abs** (float): Stop when the change of
       the criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of
+    - **stopping.maxfun** (int): If the maximum number of
       function evaluation is reached, the optimization stops but we do not count
       this as convergence.
 ```
@@ -3879,147 +3917,19 @@ addition to estimagic when using an NLOPT algorithm. To install nlopt run
     meter population_size. If the user doesn't specify a value, it is set to the nlopt
     default of 10*(n+1).
 
-    - **convergence.relative_params_tolerance** (float):  Stop when the relative movement
+    - **convergence.xtol_rel** (float):  Stop when the relative movement
       between parameter vectors is smaller than this.
-    - **convergence.absolute_params_tolerance** (float): Stop when the absolute movement
+    - **convergence.xtol_abs** (float): Stop when the absolute movement
       between parameter vectors is smaller than this.
-    - **convergence.relative_criterion_tolerance** (float): Stop when the relative
+    - **convergence.ftol_rel** (float): Stop when the relative
       improvement between two iterations is smaller than this.
-    - **convergence.absolute_criterion_tolerance** (float): Stop when the change of the
+    - **convergence.ftol_abs** (float): Stop when the change of the
       criterion function between two iterations is smaller than this.
-    - **stopping.max_criterion_evaluations** (int): If the maximum number of function
+    - **stopping.maxfun** (int): If the maximum number of function
       evaluation is reached, the optimization stops but we do not count this as
       convergence.
     - **population_size** (int): Size of the population. If None, it's set to be
       10 * (number of parameters + 1).
-```
-
-## The SimOpt Optimizers (simopt)
-
-estimagic supports the following [SimOpt](https://github.com/simopt-admin/simopt)
-algorithms. Please add the
-[appropriate citations](https://github.com/simopt-admin/simopt) in addition to estimagic
-when using a SimOpt algorithm. To install simopt run `pip install simoptlib==1.0.1`.
-
-```{eval-rst}
-.. dropdown:: simopt_adam
-
-    .. code-block::
-
-        "simopt_adam"
-
-    Minimize a scalar function using the ADAM algorithm from SimOpt.
-
-    - **stopping_max_iterations** (int): If the maximum number of iterations is reached,
-      the optimization stops, but we do not count this as convergence.
-    - **crn_across_solns** (bool): Use CRN across solutions? Default True.
-    - **r** (int): Number of replications taken at each solution. Default 1.
-    - **beta_1** (float): Exponential decay of the rate for the first moment estimates.
-      Default 0.9.
-    - **beta_2** (float): Exponential decay rate for the second-moment estimates.
-      Default 0.999.
-    - **alpha** (float): Step size. Default 1.0.
-    - **epsilon** (float): A small value to prevent zero-division. Default 10e-8.
-    - **sensitivity** (float): Shrinking scale for variable bounds. Default 10e-7.
-```
-
-```{eval-rst}
-.. dropdown:: simopt_astrodf
-
-    .. code-block::
-
-        "simopt_astrodf"
-
-    Minimize a scalar function using the ASTRODF algorithm from SimOpt.
-
-    - **stopping_max_iterations** (int): If the maximum number of iterations is reached,
-      the optimization stops, but we do not count this as convergence.
-    - **bounds_padding** (float): Subtract (add) this value of the bounds which will be
-      used by ASTRODF internally. Default 1e-8.
-    - **crn_across_solns** (bool): Use CRN across solutions? Default True.
-    - **delta_max** (float): Maximum value of the trust-region radius. Default 50.0
-    - **eta_1** (float): Threshhold for a successful iteration. Default 0.1.
-    - **eta_2** (float): Threshhold for a very successful iteration. Default 0.5.
-    - **gamma_1** (float): Very successful step trust-region radius increase. Default
-      2.0.
-    - **gamma_2** (float): Unsuccessful step trust-region radius decrease. Default 0.5.
-    - **w** (float): Trust-region radius rate of shrinkage in contracation loop. Default
-      0.85.
-    - **mu** (int): Trust-region radius ratio upper bound in contraction loop. Default
-      1000.
-    - **beta** (int): Trust-region radius ratio lower bound in contraction loop. Default
-      10.
-    - **lambda_min** (int): Minimum sample size value. Default 8.
-    - **simple_solve** (bool): Solve subproblem with Cauchy point (rough approximate)?
-      Default False.
-    - **criticality_select** (bool): Skip contraction loop if not near critical
-      region? Default True.
-    - **criticality_threshold** (float): Threshold on gradient norm indicating
-      near-critical region. Default 0.1.
-
-    .. note::
-        To get more accurate results in the case of bounds we revert the subtraction of
-        a large value from the bounds that is done internally in simopt.
-        Since the algorithm is numerically instable in the case of binding bounds
-        without this substraction, we subtract a (small) value defined by
-        ``bounds_padding``. See the ASTRODF `source code
-        <https://tinyurl.com/5fxcvw2k>`_ for details.
-
-```
-
-```{eval-rst}
-.. dropdown:: simopt_spsa
-
-    .. code-block::
-
-        "simopt_spsa"
-
-    Minimize a scalar function using the SPSA algorithm from SimOpt.
-
-    - **stopping_max_iterations** (int): If the maximum number of iterations is reached,
-      the optimization stops, but we do not count this as convergence.
-    - **crn_across_solns** (bool): Use CRN across solutions? Default True.
-    - **alpha** (float): Non-negative coefficient in the SPSA gain sequecence ak.
-      Default 0.602.
-    - **gamma** (float): Non-negative coefficient in the SPSA gain sequence ck. Default
-      0.101.
-    - **step** (float): Initial desired magnitude of change in the theta elements.
-      Default 0.5.
-    - **gavg** (int): Averaged SP gradients used per iteration. Default 1.
-    - **n_reps** (int): Number of replications takes at each solution. Default 2.
-    - **n_loss** (int): Number of loss function evaluations used in this gain
-      calculation. Default 2.
-    - **eval_pct** (float): Percentage of the expected number of loss evaluations per
-      run. Default 2/3.
-    - **iter_pct** (float): Percentage of the maximum expected number of iterations.
-      Default 0.1.
-```
-
-```{eval-rst}
-.. dropdown:: simopt_strong
-
-    .. code-block::
-
-        "simopt_strong"
-
-    Minimize a scalar function using the STRONG algorithm from SimOpt.
-
-    - **stopping_max_iterations** (int): If the maximum number of iterations is reached,
-      the optimization stops, but we do not count this as convergence.
-    - **crn_across_solns** (bool): Use CRN across solutions? Default True.
-    - **n0** (int): Initial sample size Default 10.
-    - **n_r** (int): Number of replications taken at each solution. Default 1.
-    - **sensitivity** (float): Shrinking scale for VarBds. Default 10e-7.
-    - **delta_threshold** (float): Maximum value of the radius. Default 1.2.
-    - **delta_T** (float): Initial size of trust region. Default 2.0.
-    - **eta_0** (float): Constant for accepting. Default 0.01.
-    - **eta_1** (float): Constant for more confident accepting. Default 0.3.
-    - **gamma_1** (float): Constant for shrinking the trust region. Default 0.9.
-    - **gamma_2** (float): Constant for expanding the trust region. Default 1.11.
-    - **lambda** (int): Magnifying factor for n_r inside the finite difference function.
-      Default 2.
-    - **lambda_2** (float): Magnifying factor for n_r in stage I and stage II. Default
-      1.01.
 ```
 
 ## References

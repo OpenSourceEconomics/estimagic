@@ -1,23 +1,28 @@
+# 
+
 <div style="padding-top: 50px;">
 </div>
 
 ```{raw} html
-<img src="_static/images/estimagic_logo.svg" class="only-light center" style="display:block; margin-left:auto; margin-right:auto; width:300px; height:auto;"/>
+<img src="_static/images/optimagic_logo.svg" class="only-light center" style="display:block; margin-left:auto; margin-right:auto; width:300px; height:auto;"/>
 
-<img src="_static/images/estimagic_logo_dark_mode.svg" class="only-dark center" style="display:block; margin-left:auto; margin-right:auto; width:300px; height:auto;"/>
+<img src="_static/images/optimagic_logo_dark_mode.svg" class="only-dark center" style="display:block; margin-left:auto; margin-right:auto; width:300px; height:auto;"/>
 ```
 
 <br>
 <br>
 
-`estimagic` is a Python package for nonlinear optimization with or without constraints.
-It is particularly suited to solve difficult nonlinear estimation problems. On top, it
-provides functionality to perform statistical inference on estimated parameters.
+*optimagic* is a Python package for numerical optimization. It is a unified interface to
+optimizers from SciPy, NlOpt and many other Python packages.
 
-For a complete introduction to optimization in estimagic, check out the
-{ref}`estimagic_scipy2022`
+*optimagic*'s `minimize` function works just like SciPy's, so you don't have to adjust
+your code. You simply get more optimizers for free. On top you get powerful diagnostic
+tools, parallel numerical derivatives and more. If you want to see what *optimagic* can
+do, check out this [tutorial](tutorials/optimization_overview.ipynb)
 
-If you want to learn more about estimagic, dive into one of the following topics
+*optimagic* was formerly called *estimagic*, because it also provides functionality to
+perform statistical inference on estimated parameters. *estimagic* is now a subpackage
+of *optimagic*, which is documented [here](estimagic).
 
 `````{grid} 1 2 2 2
 ---
@@ -29,16 +34,16 @@ gutter: 3
 :class-img-top: index-card-image
 :shadow: md
 
-```{button-link} getting_started/index.html
+```{button-link} tutorials/index.html
 ---
 click-parent:
 ref-type: ref
 class: stretched-link index-card-link sd-text-primary
 ---
-Getting Started
+Tutorials
 ```
 
-New users of estimagic should read this first.
+New users of optimagic should read this first.
 
 ````
 
@@ -48,7 +53,7 @@ New users of estimagic should read this first.
 :class-img-top: index-card-image
 :shadow: md
 
-```{button-link} how_to_guides/index.html
+```{button-link} how_to/index.html
 ---
 click-parent:
 ref-type: ref
@@ -67,7 +72,7 @@ Detailed instructions for specific and advanced tasks.
 :class-img-top: index-card-image
 :shadow: md
 
-```{button-link} getting_started/installation.html
+```{button-link} installation.html
 ---
 click-parent:
 ref-type: ref
@@ -76,7 +81,7 @@ class: stretched-link index-card-link sd-text-primary
 Installation
 ```
 
-Installation instructions for estimagic and optional dependencies.
+Installation instructions for optimagic and optional dependencies.
 
 ````
 
@@ -106,7 +111,7 @@ List of numerical optimizers and their optional parameters.
 :class-img-top: index-card-image
 :shadow: md
 
-```{button-link} explanations/index.html
+```{button-link} explanation/index.html
 ---
 click-parent:
 ref-type: ref
@@ -125,7 +130,7 @@ Background information on key topics central to the package.
 :class-img-top: index-card-image
 :shadow: md
 
-```{button-link} reference_guides/index.html
+```{button-link} reference/index.html
 ---
 click-parent:
 ref-type: ref
@@ -134,7 +139,7 @@ class: stretched-link index-card-link sd-text-primary
 API Reference
 ```
 
-Detailed description of the estimagic API.
+Detailed description of the optimagic API.
 
 ````
 
@@ -154,7 +159,7 @@ class: stretched-link index-card-link sd-text-primary
 Videos
 ```
 
-Collection of tutorials, talks, and screencasts on estimagic.
+Collection of tutorials, talks, and screencasts on optimagic.
 
 ````
 
@@ -165,47 +170,51 @@ Collection of tutorials, talks, and screencasts on estimagic.
 hidden: true
 maxdepth: 1
 ---
-getting_started/index
-how_to_guides/index
-explanations/index
-reference_guides/index
+tutorials/index
+how_to/index
+explanation/index
+reference/index
 development/index
 videos
 algorithms
+estimagic/index
+installation
 ```
 
-## Highlights
+______________________________________________________________________
 
-### Optimization
+We thank all institutions that have funded or supported optimagic (formerly estimagic)
 
-- estimagic wraps algorithms from *scipy.optimize*, *nlopt*, *pygmo* and more. See
-  {ref}`list_of_algorithms`
-- estimagic implements constraints efficiently via reparametrization, so you can solve
-  constrained problems with any optimzer that supports bounds. See {ref}`constraints`
-- The parameters of an optimization problem can be arbitrary pytrees. See {ref}`params`.
-- The complete history of parameters and function evaluations can be saved in a database
-  for maximum reproducibility. See [How to use logging]
-- Painless and efficient multistart optimization. See [How to do multistart]
-- The progress of the optimization is displayed in real time via an interactive
-  dashboard. See {ref}`dashboard`.
+```{image} _static/images/aai-institute-logo.svg
+---
+width: 185px
+---
+```
 
-### Estimation and Inference
+```{image} _static/images/numfocus_logo.png
+---
+width: 200
+---
+```
 
-- You can estimate a model using method of simulated moments (MSM), calculate standard
-  errors and do sensitivity analysis with just one function call. See [MSM Tutorial]
-- Asymptotic standard errors for maximum likelihood estimation.
-- estimagic also provides bootstrap confidence intervals and standard errors. Of course
-  the bootstrap procedures are parallelized.
+```{image} _static/images/tra_logo.png
+---
+width: 240px
+---
+```
 
-### Numerical differentiation
+```{image} _static/images/hoover_logo.png
+---
+width: 192px
+---
+```
 
-- estimagic can calculate precise numerical derivatives using
-  [Richardson extrapolations](https://en.wikipedia.org/wiki/Richardson_extrapolation).
-- Function evaluations needed for numerical derivatives can be done in parallel with
-  pre-implemented or user provided batch evaluators.
+```{image} _static/images/transferlab-logo.svg
+---
+width: 420px
+---
+```
+
+______________________________________________________________________
 
 **Useful links for search:** {ref}`genindex` | {ref}`modindex` | {ref}`search`
-
-[how to do multistart]: how_to_guides/optimization/how_to_do_multistart_optimizations
-[how to use logging]: how_to_guides/optimization/how_to_use_logging
-[msm tutorial]: getting_started/estimation/first_msm_estimation_with_estimagic

@@ -1,5 +1,5 @@
 ---
-name: estimagic
+name: optimagic
 channels:
   - conda-forge
   - nodefaults
@@ -7,19 +7,15 @@ dependencies:
   - python=3.10  # dev
   - cyipopt<=1.2.0  # dev
   - jupyterlab  # dev, docs
-  - nb_black  # dev, docs
   - nlopt  # dev, tests
   - pdbpp  # dev
   - pip  # dev, tests, docs
-  - pytask>=0.0.11  # dev
   - pytest  # dev, tests
   - pytest-cov  # tests
   - pytest-xdist  # dev, tests
   - setuptools_scm  # dev
   - statsmodels  # dev, tests
   - toml  # dev
-  - bokeh<=2.4.3  # run, tests
-  - click  # run, tests
   - cloudpickle  # run, tests
   - joblib  # run, tests
   - numpy<2.0  # run, tests
@@ -34,22 +30,20 @@ dependencies:
   - sphinx-design  # docs
   - sphinx-panels  # docs
   - sphinxcontrib-bibtex  # docs
-  - tranquilo>=0.0.4  # dev, tests
   - seaborn  # dev, tests
-  - mypy  # dev, tests
+  - mypy>=1.11  # dev, tests
+  - pyyaml  # dev, tests
+  - jinja2  # dev, tests
+  - furo  # dev, docs
   - pip:  # dev, tests, docs
       - DFO-LS  # dev, tests
       - Py-BOBYQA  # dev, tests
-      - black  # dev
-      - blackcellmagic  # dev
       - fides==0.7.4  # dev, tests
-      - gif  # dev
-      - gif[matplotlib]  # dev
       - kaleido  # dev, tests
       - pre-commit  # dev
-      - simoptlib==1.0.1  # dev, tests
       - -e .  # dev
       # type stubs
       - pandas-stubs  # dev, tests
       - types-cffi  # dev, tests
       - types-openpyxl  # dev, tests
+      - types-jinja2  # dev, tests

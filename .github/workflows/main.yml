@@ -29,14 +29,14 @@ jobs:
       - name: create build environment
         uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: ./.envs/testenv-linux.yml
+          environment-file: ./.tools/envs/testenv-linux.yml
           cache-environment: true
           create-args: |
             python=${{ matrix.python-version }}
       - name: run pytest
         shell: bash -l {0}
         run: |
-          micromamba activate estimagic
+          micromamba activate optimagic
           pytest --cov-report=xml --cov=./
       - name: Upload coverage report.
         if: runner.os == 'Linux' && matrix.python-version == '3.10'
@@ -60,19 +60,19 @@ jobs:
       - name: create build environment
         uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: ./.envs/testenv-others.yml
+          environment-file: ./.tools/envs/testenv-others.yml
           cache-environment: true
           create-args: |
             python=${{ matrix.python-version }}
       - name: run pytest
         shell: bash -l {0}
         run: |
-          micromamba activate estimagic
+          micromamba activate optimagic
           pytest -m "not slow and not jax"
   run-tests-with-old-pandas:
-    # This job is only for testing if estimagic works with older pandas versions, as
-    # many pandas functions we use will be deprecated in pandas 3. estimagic's behavior
-    # for older verions is handled in src/estimagic/compat.py.
+    # This job is only for testing if optimagic works with older pandas versions, as
+    # many pandas functions we use will be deprecated in pandas 3. optimagic's behavior
+    # for older verions is handled in src/optimagic/compat.py.
     name: Run tests for ${{ matrix.os}} on ${{ matrix.python-version }} with pandas 1
     runs-on: ${{ matrix.os }}
     strategy:
@@ -87,17 +87,15 @@ jobs:
       - name: create build environment
         uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: ./.envs/testenv-pandas.yml
+          environment-file: ./.tools/envs/testenv-pandas.yml
           cache-environment: true
           create-args: |
             python=${{ matrix.python-version }}
       - name: run pytest
         shell: bash -l {0}
         run: |
-          micromamba activate estimagic
-          pytest tests/visualization
-          pytest tests/parameters
-          pytest tests/inference
+          micromamba activate optimagic
+          pytest -m "not slow and not jax"
   code-in-docs:
     name: Run code snippets in documentation
     runs-on: ubuntu-latest
@@ -106,33 +104,34 @@ jobs:
       - name: create build environment
         uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: ./.envs/testenv-linux.yml
-          environment-name: estimagic
-          cache-env: true
-          extra-specs: python=3.12
+          environment-file: ./.tools/envs/testenv-linux.yml
+          environment-name: optimagic
+          cache-environment: true
+          create-args: |
+            python=3.12
       - name: run sphinx
         shell: bash -l {0}
         run: |-
-          micromamba activate estimagic
+          micromamba activate optimagic
           cd docs/source
-          python -m doctest -v how_to_guides/optimization/how_to_specify_constraints.md
+          python -m doctest -v how_to/how_to_constraints.md
   run-mypy:
     name: Run mypy
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: create build environment
-        uses: mamba-org/provision-with-micromamba@main
+        uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: ./.envs/testenv-linux.yml
-          environment-name: estimagic
-          cache-env: true
-          extra-specs: |
+          environment-file: ./.tools/envs/testenv-linux.yml
+          environment-name: optimagic
+          cache-environment: true
+          create-args: |
             python=3.10
       - name: Run mypy
         shell: bash -l {0}
         run: |-
-          micromamba activate estimagic
+          micromamba activate optimagic
           mypy

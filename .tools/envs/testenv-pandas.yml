@@ -1,0 +1,33 @@
+---
+name: optimagic
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - pandas<2.0.0
+  - nlopt  # dev, tests
+  - pip  # dev, tests, docs
+  - pytest  # dev, tests
+  - pytest-cov  # tests
+  - pytest-xdist  # dev, tests
+  - statsmodels  # dev, tests
+  - cloudpickle  # run, tests
+  - joblib  # run, tests
+  - numpy<2.0  # run, tests
+  - plotly  # run, tests
+  - pybaum >= 0.1.2  # run, tests
+  - scipy>=1.2.1  # run, tests
+  - sqlalchemy  # run, tests
+  - seaborn  # dev, tests
+  - mypy>=1.11  # dev, tests
+  - pyyaml  # dev, tests
+  - jinja2  # dev, tests
+  - pip:  # dev, tests, docs
+      - DFO-LS  # dev, tests
+      - Py-BOBYQA  # dev, tests
+      - fides==0.7.4  # dev, tests
+      - kaleido  # dev, tests
+      - types-cffi  # dev, tests
+      - types-openpyxl  # dev, tests
+      - types-jinja2  # dev, tests
+      - -e ../../

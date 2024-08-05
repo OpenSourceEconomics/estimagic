@@ -1,6 +1,6 @@
 # Credits
 
-## The estimagic Team
+## The optimagic Team
 
 ```{eval-rst}
 +---------------------------------------------------------------+-------------------------------------------------------------------+-------------------------------------------------------------------+-------------------------------------------------------------------+
@@ -21,41 +21,47 @@
 +---------------------------------------------------------------+-------------------------------------------------------------------+-------------------------------------------------------------------+-------------------------------------------------------------------+
 ```
 
-Janoś is the original developer and architect behind estimagic. All team members are
-active contributors in terms of commits, advice or community building. Aida and Bahar
-are supported by [TRA Modelling]. Hans-Martin supports estimagic in many ways, including
-funding and great feedback from using and teaching estimagic. Ken supports estimagic
-with his expertise on all numerical topics, financed a research stay at Standford for
-Janoś, Sebi and Tim and organized a workshop on numerical optimization with estimagic at
-Hoover Institution.
+Janoś is the original developer and architect behind optimagic (formerly estimagic). All
+team members are active contributors in terms of commits, advice or community building.
+Hans-Martin and Ken support optimagic with funding and their expertise.
 
 ## Contributors
 
 We are grateful for many contributions from the community. In particular, we want to
-thank:
-
-- Moritz Mendel
-- Max Blesch
-- Christian Zimpelmann
-- Robin Musolff
-- Sofia Badini
-- Sofya Akimova
-- Xuefei Han
-- Leiqiong Wan
-- Andrew Souther
-- Luis Calderon
-- Linda Maokomatanda
-- Madhurima Chandra
-- Vijaybabu Gangaprasad
-
-If you want to find your name here as well, please contact us or browse through our
-Issues and submit a Pull Request.
+thank Moritz Mendel, Max Blesch, Christian Zimpelmann, Robin Musolff, Sofia Badini,
+Sofya Akimova, Xuefei Han, Leiqiong Wan, Andrew Souther, Luis Calderon, Linda
+Maokomatanda, Madhurima Chandra, and Vijaybabu Gangaprasad.
 
 ## Acknowledgements
 
-Estimagic is funded by the [TRA Modelling] (University of Bonn) as part of the
-Excellence Strategy of the federal and state governments.
+We thank all institutions that have funded or supported optimagic (formerly estimagic)
 
-:::\{figure} ../\_static/images/tra_logo.png :width: 200px :::
+```{image} ../_static/images/aai-institute-logo.svg
+---
+width: 185px
+---
+```
 
-[tra modelling]: https://www.uni-bonn.de/en/research-and-teaching/research-profile/transdisciplinary-research-areas/tra-1-modelling
+```{image} ../_static/images/numfocus_logo.png
+---
+width: 200
+---
+```
+
+```{image} ../_static/images/tra_logo.png
+---
+width: 240px
+---
+```
+
+```{image} ../_static/images/hoover_logo.png
+---
+width: 192px
+---
+```
+
+```{image} ../_static/images/transferlab-logo.svg
+---
+width: 420px
+---
+```

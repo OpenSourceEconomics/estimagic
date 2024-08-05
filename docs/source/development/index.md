@@ -5,9 +5,9 @@
 maxdepth: 1
 ---
 code_of_conduct
-how-to
+how_to_contribute
 styleguide
-eeps
+enhancement_proposals
 credits
 changes
 ```

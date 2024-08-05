@@ -1,17 +1,102 @@
+# ======================================================================================
+# Project metadata
+# ======================================================================================
+[project]
+name = "optimagic"
+description = "Tools to solve difficult numerical optimization problems."
+requires-python = ">=3.10"
+dependencies = [
+    "cloudpickle",
+    "joblib",
+    "numpy<2.0",
+    "pandas",
+    "plotly",
+    "pybaum>=0.1.2",
+    "scipy>=1.2.1",
+    "sqlalchemy>=1.3",
+]
+dynamic = ["version"]
+keywords = [
+    "econometrics",
+    "statistics",
+    "estimation",
+    "extremum estimation",
+    "optimization",
+    "inference",
+    "numerical differentiation",
+    "finite differences",
+    "derivative free optimization",
+    "method of simulated moments",
+    "maximum likelihood",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering",
+]
+authors = [
+    { name = "Janos Gabler", email = "janos.gabler@gmail.com" },
+]
+maintainers = [
+    { name = "Janos Gabler", email = "janos.gabler@gmail.com" },
+    { name = "Tim Mensinger", email = "mensingertim@gmail.com" },
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.license]
+text = "MIT"
+
+[project.urls]
+Repository = "https://github.com/opensourceeconomics/optimagic"
+Github = "https://github.com/opensourceeconomics/optimagic"
+Tracker = "https://github.com/OpenSourceEconomics/optimagic/issues"
+
+
+# ======================================================================================
+# Build system configuration
+# ======================================================================================
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch_vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/optimagic/_version.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["tests"]
+only-packages = true
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
+sources = ["src"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 
-[tool.setuptools_scm]
-write_to = "src/estimagic/_version.py"
-
-
+# ======================================================================================
+# Ruff configuration
+# ======================================================================================
 [tool.ruff]
-target-version = "py37"
+target-version = "py310"
 fix = true
 
+[tool.ruff.lint]
 select = [
+  # isort
+  "I",
   # pyflakes
   "F",
   # pycodestyle
@@ -53,26 +138,22 @@ extend-ignore = [
   "PLR5501",
   # For calls to warnings.warn(): No explicit `stacklevel` keyword argument found
   "B028",
+  # Incompatible with formatting
+  "ISC001",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "docs/source/conf.py" = ["E501", "ERA001", "DTZ005"]
-"src/estimagic/parameters/kernel_transformations.py" = ["ARG001", "N806"]
+"src/optimagic/parameters/kernel_transformations.py" = ["ARG001", "N806"]
 "docs/source/*" = ["B018"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.nbqa.config]
-black = "pyproject.toml"
 
-[tool.nbqa.mutate]
-black = 1
-
-[tool.pytask]
-infer_latex_dependencies = true
-
-
+# ======================================================================================
+# Pytest configuration
+# ======================================================================================
 [tool.pytest.ini_options]
 filterwarnings = [
     "ignore:Using or importing the ABCs from 'collections'",
@@ -99,8 +180,14 @@ markers = [
     "slow: Tests that take a long time to run and are skipped in continuous integration.",
     "jax: Tests that require jax to be installed and are skipped on non-Linux systems.",
 ]
-norecursedirs = ["docs", ".envs"]
+norecursedirs = ["docs", ".tools"]
 
+
+# ======================================================================================
+# Misc configuration
+# ======================================================================================
+[tool.pytask]
+infer_latex_dependencies = true
 
 [tool.yamlfix]
 line_length = 88
@@ -108,6 +195,9 @@ sequence_style = "block_style"
 none_representation = "null"
 
 
+# ======================================================================================
+# Mypy configuration
+# ======================================================================================
 [tool.mypy]
 files = ["src", "tests"]
 check_untyped_defs = true
@@ -120,134 +210,127 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 module = [
-    "estimagic.benchmarking",
-    "estimagic.benchmarking.benchmark_reports",
-    "estimagic.benchmarking.cartis_roberts",
-    "estimagic.benchmarking.get_benchmark_problems",
-    "estimagic.benchmarking.more_wild",
-    "estimagic.benchmarking.noise_distributions",
-    "estimagic.benchmarking.process_benchmark_results",
-    "estimagic.benchmarking.run_benchmark",
+    "optimagic.benchmarking",
+    "optimagic.benchmarking.benchmark_reports",
+    "optimagic.benchmarking.cartis_roberts",
+    "optimagic.benchmarking.get_benchmark_problems",
+    "optimagic.benchmarking.more_wild",
+    "optimagic.benchmarking.noise_distributions",
+    "optimagic.benchmarking.process_benchmark_results",
+    "optimagic.benchmarking.run_benchmark",
 
-    "estimagic.dashboard",
-    "estimagic.dashboard.callbacks",
-    "estimagic.dashboard.colors",
-    "estimagic.dashboard.dashboard_app",
-    "estimagic.dashboard.plot_functions",
-    "estimagic.dashboard.run_dashboard",
+    "optimagic.differentiation",
+    "optimagic.differentiation.derivatives",
+    "optimagic.differentiation.finite_differences",
+    "optimagic.differentiation.generate_steps",
+    "optimagic.differentiation.richardson_extrapolation",
 
-    "estimagic.differentiation",
-    "estimagic.differentiation.derivatives",
-    "estimagic.differentiation.finite_differences",
-    "estimagic.differentiation.generate_steps",
-    "estimagic.differentiation.richardson_extrapolation",
+    "optimagic.examples",
+    "optimagic.examples.criterion_functions",
+    "optimagic.examples.numdiff_functions",
 
-    "estimagic.estimation",
-    "estimagic.estimation.estimate_ml",
-    "estimagic.estimation.estimate_msm",
-    "estimagic.estimation.estimation_summaries",
-    "estimagic.estimation.msm_weighting",
 
-    "estimagic.examples",
-    "estimagic.examples.criterion_functions",
-    "estimagic.examples.logit",
-    "estimagic.examples.numdiff_functions",
+    "optimagic.logging",
+    "optimagic.logging.create_tables",
+    "optimagic.logging.load_database",
+    "optimagic.logging.read_from_database",
+    "optimagic.logging.read_log",
+    "optimagic.logging.write_to_database",
 
-    "estimagic.inference",
-    "estimagic.inference.bootstrap_ci",
-    "estimagic.inference.bootstrap_helpers",
-    "estimagic.inference.bootstrap_outcomes",
-    "estimagic.inference.bootstrap_samples",
-    "estimagic.inference.bootstrap",
-    "estimagic.inference.ml_covs",
-    "estimagic.inference.msm_covs",
-    "estimagic.inference.shared",
+    "optimagic.optimization",
+    "optimagic.optimization.algo_options",
+    "optimagic.optimization.check_arguments",
+    "optimagic.optimization.convergence_report",
+    "optimagic.optimization.error_penalty",
+    "optimagic.optimization.get_algorithm",
+    "optimagic.optimization.history_tools",
+    "optimagic.optimization.internal_criterion_template",
+    "optimagic.optimization.optimization_logging",
+    "optimagic.optimization.optimize_result",
+    "optimagic.optimization.optimize",
+    "optimagic.optimization.process_results",
+    "optimagic.optimization.multistart",
+    "optimagic.optimization.scipy_aliases",
+    "optimagic.optimization.create_optimization_problem",
 
-    "estimagic.logging",
-    "estimagic.logging.create_tables",
-    "estimagic.logging.load_database",
-    "estimagic.logging.read_from_database",
-    "estimagic.logging.read_log",
-    "estimagic.logging.write_to_database",
+    "optimagic.optimizers._pounders",
+    "optimagic.optimizers._pounders.pounders_auxiliary",
+    "optimagic.optimizers._pounders.pounders_history",
+    "optimagic.optimizers._pounders._conjugate_gradient",
+    "optimagic.optimizers._pounders._steihaug_toint",
+    "optimagic.optimizers._pounders._trsbox",
+    "optimagic.optimizers._pounders.bntr",
+    "optimagic.optimizers._pounders.gqtpar",
+    "optimagic.optimizers._pounders.linear_subsolvers",
 
-    "estimagic.optimization",
-    "estimagic.optimization.subsolvers",
-    "estimagic.optimization.subsolvers._conjugate_gradient",
-    "estimagic.optimization.subsolvers._steihaug_toint",
-    "estimagic.optimization.subsolvers._trsbox",
-    "estimagic.optimization.subsolvers.bntr",
-    "estimagic.optimization.subsolvers.gqtpar",
-    "estimagic.optimization.subsolvers.linear_subsolvers",
-    "estimagic.optimization.algo_options",
-    "estimagic.optimization.bhhh",
-    "estimagic.optimization.check_arguments",
-    "estimagic.optimization.convergence_report",
-    "estimagic.optimization.cyipopt_optimizers",
-    "estimagic.optimization.error_penalty",
-    "estimagic.optimization.fides_optimizers",
-    "estimagic.optimization.get_algorithm",
-    "estimagic.optimization.history_tools",
-    "estimagic.optimization.internal_criterion_template",
-    "estimagic.optimization.nag_optimizers",
-    "estimagic.optimization.neldermead",
-    "estimagic.optimization.nlopt_optimizers",
-    "estimagic.optimization.optimization_logging",
-    "estimagic.optimization.optimize_result",
-    "estimagic.optimization.optimize",
-    "estimagic.optimization.pounders_auxiliary",
-    "estimagic.optimization.pounders_history",
-    "estimagic.optimization.pounders",
-    "estimagic.optimization.process_multistart_sample",
-    "estimagic.optimization.process_results",
-    "estimagic.optimization.pygmo_optimizers",
-    "estimagic.optimization.scipy_optimizers",
-    "estimagic.optimization.simopt_optimizers",
-    "estimagic.optimization.tao_optimizers",
-    "estimagic.optimization.tiktak",
-    "estimagic.optimization.tranquilo",
+    "optimagic.optimizers",
+    "optimagic.optimizers.tranquilo",
+    "optimagic.optimizers.pygmo_optimizers",
+    "optimagic.optimizers.scipy_optimizers",
+    "optimagic.optimizers.nag_optimizers",
+    "optimagic.optimizers.neldermead",
+    "optimagic.optimizers.nlopt_optimizers",
+    "optimagic.optimizers.bhhh",
+    "optimagic.optimizers.ipopt",
+    "optimagic.optimizers.fides",
+    "optimagic.optimizers.pounders",
+    "optimagic.optimizers.tao_optimizers",
 
-    "estimagic.parameters",
-    "estimagic.parameters.block_trees",
-    "estimagic.parameters.check_constraints",
-    "estimagic.parameters.consolidate_constraints",
-    "estimagic.parameters.constraint_tools",
-    "estimagic.parameters.conversion",
-    "estimagic.parameters.kernel_transformations",
-    "estimagic.parameters.nonlinear_constraints",
-    "estimagic.parameters.parameter_bounds",
-    "estimagic.parameters.parameter_groups",
-    "estimagic.parameters.process_constraints",
-    "estimagic.parameters.process_selectors",
-    "estimagic.parameters.scale_conversion",
-    "estimagic.parameters.space_conversion",
-    "estimagic.parameters.tree_conversion",
-    "estimagic.parameters.tree_registry",
 
-    "estimagic.sensitivity",
-    "estimagic.sensitivity.msm_sensitivity",
+    "optimagic.parameters",
+    "optimagic.parameters.block_trees",
+    "optimagic.parameters.check_constraints",
+    "optimagic.parameters.consolidate_constraints",
+    "optimagic.parameters.constraint_tools",
+    "optimagic.parameters.conversion",
+    "optimagic.parameters.kernel_transformations",
+    "optimagic.parameters.nonlinear_constraints",
+    "optimagic.parameters.process_constraints",
+    "optimagic.parameters.process_selectors",
+    "optimagic.parameters.space_conversion",
+    "optimagic.parameters.tree_conversion",
+    "optimagic.parameters.tree_registry",
 
-    "estimagic.shared",
-    "estimagic.shared.check_option_dicts",
 
-    "estimagic.visualization",
-    "estimagic.visualization.convergence_plot",
-    "estimagic.visualization.derivative_plot",
-    "estimagic.visualization.deviation_plot",
-    "estimagic.visualization.estimation_table",
-    "estimagic.visualization.history_plots",
-    "estimagic.visualization.lollipop_plot",
-    "estimagic.visualization.plotting_utilities",
-    "estimagic.visualization.profile_plot",
-    "estimagic.visualization.slice_plot",
+    "optimagic.shared",
+    "optimagic.shared.check_option_dicts",
+    "optimagic.shared.compat",
+    "optimagic.shared.process_user_function",
+
+    "optimagic.visualization",
+    "optimagic.visualization.convergence_plot",
+    "optimagic.visualization.deviation_plot",
+    "optimagic.visualization.history_plots",
+    "optimagic.visualization.plotting_utilities",
+    "optimagic.visualization.profile_plot",
+    "optimagic.visualization.slice_plot",
+
+    "optimagic",
+    "optimagic.batch_evaluators",
+    "optimagic.cli",
+    "optimagic.decorators",
+    "optimagic.exceptions",
+    "optimagic.utilities",
+    "optimagic.deprecations",
 
     "estimagic",
-    "estimagic.batch_evaluators",
-    "estimagic.cli",
-    "estimagic.compat",
-    "estimagic.decorators",
-    "estimagic.exceptions",
-    "estimagic.process_user_function",
-    "estimagic.utilities",
+    "estimagic.examples",
+    "estimagic.examples.logit",
+    "estimagic.estimate_ml",
+    "estimagic.estimate_msm",
+    "estimagic.estimation_summaries",
+    "estimagic.msm_weighting",
+    "estimagic.bootstrap_ci",
+    "estimagic.bootstrap_helpers",
+    "estimagic.bootstrap_outcomes",
+    "estimagic.bootstrap_samples",
+    "estimagic.bootstrap",
+    "estimagic.ml_covs",
+    "estimagic.msm_covs",
+    "estimagic.shared_covs",
+    "estimagic.msm_sensitivity",
+    "estimagic.estimation_table",
+    "estimagic.lollipop_plot",
 ]
 check_untyped_defs = false
 disallow_any_generics = false
@@ -287,9 +370,6 @@ module = [
     "bokeh.command",
     "bokeh.command.util",
     "fides",
-    "simopt",
-    "simopt.base",
-    "simopt.experiment_base",
     "petsc4py",
     "tranquilo",
     "tranquilo.tranquilo",
@@ -302,6 +382,6 @@ module = [
     "numba",
     "pathos",
     "pathos.pools",
-    "estimagic._version",
+    "optimagic._version",
   ]
 ignore_missing_imports = true

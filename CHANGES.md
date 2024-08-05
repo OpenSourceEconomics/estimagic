@@ -1,11 +1,60 @@
 # Changes
 
-This is a record of all past estimagic releases and what went into them in reverse
+This is a record of all past optimagic releases and what went into them in reverse
 chronological order. We follow [semantic versioning](https://semver.org/) and all
-releases are available on [Anaconda.org](https://anaconda.org/OpenSourceEconomics/estimagic).
+releases are available on [Anaconda.org](https://anaconda.org/OpenSourceEconomics/optimagic).
 
 Following the [scientific python guidelines](https://scientific-python.org/specs/spec-0000/)
-we drop the official support for Python 3.8.
+we drop the official support for Python 3.9.
+
+
+## 0.5.0
+
+This is a major release with several breaking changes and deprecations. On a high level,
+the major changes are:
+
+- Implement EP-02: Static typing
+- Implement EP-03: Alignment with SciPy
+- Rename the package from `estimagic` to `optimagic` (while keeping the `estimagic`
+  namespace for the estimation capabilities).
+
+
+- {gh}`500` removes the dashboard, the support for simopt optimizers and the
+  `derivative_plot` ({ghuser}`janosg`)
+- {gh}`504` aligns `maximize` and `minimize` more closely with scipy. All related
+  deprecations and breaking changes are listed below. As a result, scipy code that uses
+  minimize with the arguments `x0`, `fun`, `jac` and `method` will run without changes
+  in optimagic. Similarly, to `OptimizeResult` gets some aliases so it behaves more
+  like SciPy's.
+
+### Breaking changes
+
+
+### Deprecations
+
+- The `criterion` argument of `maximize` and `minimize` is renamed to `fun` (as in
+  SciPy).
+- The `derivative` argument of `maximize` and `minimize` is renamed to `jac` (as
+  in SciPy)
+- The `criterion_and_derivative` argument of `maximize` and `minimize` is renamed
+  to `fun_and_jac` to align it with the other names.
+- The `criterion_kwargs` argument of `maximize` and `minimize` is renamed to
+  `fun_kwargs` to align it with the other names.
+- The `derivative_kwargs` argument of `maximize` and `minimize` is renamed to
+  `jac_kwargs` to align it with the other names.
+- The `criterion_and_derivative_kwargs` argument of `maximize` and `minimize` is
+  renamed to `fun_and_jac_kwargs` to align it with the other names.
+- Algorithm specific convergence and stopping criteria are renamed to align them more
+  with NlOpt and SciPy names.
+    - `convergence_relative_criterion_tolerance` -> `convergence_ftol_rel`
+    - `convergence_absolute_criterion_tolerance` -> `convergence_ftol_abs`
+    - `convergence_relative_params_tolerance` -> `convergence_xtol_rel`
+    - `convergence_absolute_params_tolerance` -> `convergence_xtol_abs`
+    - `convergence_relative_gradient_tolerance` -> `convergence_gtol_rel`
+    - `convergence_absolute_gradient_tolerance` -> `convergence_gtol_abs`
+    - `convergence_scaled_gradient_tolerance` -> `convergence_gtol_scaled`
+    - `stopping_max_criterion_evaluations` -> `stopping_maxfun`
+    - `stopping_max_iterations` -> `stopping_maxiter`
 
 
 ## 0.4.7

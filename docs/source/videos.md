@@ -2,7 +2,7 @@
 
 # Videos
 
-Check out our tutorials, talks and screencasts about estimagic.
+Check out our tutorials, talks and screencasts about optimagic.
 
 ## Talks and tutorials
 
@@ -44,7 +44,7 @@ taught at the University of Bonn by
 also [Janoś Gabler](https://github.com/janosg). You can find all screencasts of the
 course on the
 [course webite](https://effective-programming-practices.vercel.app/landing-page.html).
-Here, we show the screencasts about numerical optimization and estimagic.
+Here, we show the screencasts about numerical optimization and optimagic.
 
 ### Introduction to numerical optimization
 
@@ -56,7 +56,7 @@ allowfullscreen>
 </iframe>
 ```
 
-### Using estimagic’s minimize and maximize
+### Using optimagic’s minimize and maximize
 
 ```{raw} html
 <iframe

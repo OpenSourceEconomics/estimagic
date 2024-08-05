@@ -1,14 +1,14 @@
 ---
-name: estimagic-docs
+name: optimagic-docs
 channels:
   - conda-forge
   - nodefaults
 dependencies:
   - python=3.10
+  - typing-extensions
   - pip
   - setuptools_scm
   - toml
-  - black
   - sphinx
   - sphinxcontrib-bibtex
   - sphinx-copybutton

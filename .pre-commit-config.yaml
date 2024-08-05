@@ -9,12 +9,12 @@ repos:
     rev: 1.16.0
     hooks:
       - id: yamlfix
-        exclude: tests/optimization/fixtures
+        exclude: tests/optimagic/optimizers/_pounders/fixtures
   - repo: local
     hooks:
       - id: update-environment-files
         name: check environment file updates
-        entry: python .envs/update_envs.py
+        entry: python .tools/update_envs.py
         language: python
         always_run: true
         require_serial: true
@@ -24,7 +24,7 @@ repos:
       - id: check-added-large-files
         args:
           - --maxkb=1300
-        exclude: tests/optimization/fixtures/
+        exclude: tests/optimagic/optimizers/_pounders/fixtures/
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-vcs-permalinks
@@ -48,24 +48,13 @@ repos:
           - --branch
           - main
       - id: trailing-whitespace
+        exclude: docs/
       - id: check-ast
-      - id: check-docstring-first
-        exclude: src/estimagic/optimization/algo_options.py
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.35.1
     hooks:
       - id: yamllint
-        exclude: tests/optimization/fixtures
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
-    hooks:
-      - id: black
-        language_version: python3.10
-  - repo: https://github.com/asottile/blacken-docs
-    rev: 1.18.0
-    hooks:
-      - id: blacken-docs
-        exclude: docs/source/how_to_guides/optimization/how_to_specify_constraints.md
+        exclude: tests/optimagic/optimizers/_pounders/fixtures
   - repo: https://github.com/PyCQA/docformatter
     rev: v1.7.5
     hooks:
@@ -77,23 +66,32 @@ repos:
           - --wrap-descriptions
           - '88'
           - --blank
-        exclude: src/estimagic/optimization/algo_options.py
+        exclude: src/optimagic/optimization/algo_options.py
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.0
+    rev: v0.5.5
     hooks:
+      # Run the linter.
       - id: ruff
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.8.5
-    hooks:
-      - id: nbqa-black
-      - id: nbqa-ruff
+        types_or:
+          - python
+          - pyi
+          - jupyter
+        args:
+          - --fix
+      # Run the formatter.
+      - id: ruff-format
+        types_or:
+          - python
+          - pyi
+          - jupyter
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
     hooks:
       - id: mdformat
         additional_dependencies:
           - mdformat-gfm
-          - mdformat-black
+          - mdformat-gfm-alerts
+          - mdformat-ruff
         args:
           - --wrap
           - '88'
@@ -104,23 +102,35 @@ repos:
       - id: mdformat
         additional_dependencies:
           - mdformat-myst
-          - mdformat-black
+          - mdformat-ruff
         args:
           - --wrap
           - '88'
         files: (docs/.)
-  - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.5.0
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
     hooks:
-      - id: setup-cfg-fmt
-  - repo: https://github.com/mgedmin/check-manifest
-    rev: '0.49'
-    hooks:
-      - id: check-manifest
+      - id: nbstripout
+        exclude: |
+          (?x)^(
+            docs/source/estimagic/tutorials/estimation_tables_overview.ipynb|
+            docs/source/estimagic/explanation/bootstrap_montecarlo_comparison.ipynb|
+          )$
         args:
-          - --no-build-isolation
+          - --drop-empty-cells
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.1
+    hooks:
+      - id: mypy
+        files: src|tests
         additional_dependencies:
-          - setuptools-scm
-          - toml
+          - packaging
+          - pandas-stubs
+          - sqlalchemy-stubs
+          - types-cffi
+          - types-openpyxl
+          - types-jinja2
+        args:
+          - --config=pyproject.toml
 ci:
   autoupdate_schedule: monthly
