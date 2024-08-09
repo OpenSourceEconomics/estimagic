@@ -149,7 +149,8 @@ def example_db(tmp_path):
 
 
 def test_estimagic_log_reader_is_deprecated(example_db):
-    msg = "estimagic.OptimizeLogReader has been deprecated"
+    msg = "OptimizeLogReader is deprecated and will be removed in a future "
+    "version. Please use optimagic.logging.SQLiteLogger instead."
     with pytest.warns(FutureWarning, match=msg):
         OptimizeLogReader(example_db)
 
