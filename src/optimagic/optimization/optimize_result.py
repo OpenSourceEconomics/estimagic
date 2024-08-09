@@ -219,7 +219,7 @@ class MultistartInfo:
     exploration_results: list[float]
 
     def __getitem__(self, key):
-        deprecations.throw_dict_access_future_warning(key, "MultistartInfo")
+        deprecations.throw_dict_access_future_warning(key, obj_name=type(self).__name__)
         return getattr(self, key)
 
     @property

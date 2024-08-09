@@ -169,7 +169,7 @@ def _calculate_or_validate_base_steps(base_steps, x, target, min_steps, scaling_
         else:
             raise ValueError(f"Invalid target: {target}.")
         if min_steps is not None:
-            base_steps[base_steps < min_steps] = min_steps
+            base_steps = np.clip(base_steps, a_min=min_steps, a_max=None)
     return base_steps
 
 

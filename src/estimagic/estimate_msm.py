@@ -3,15 +3,20 @@
 import functools
 import warnings
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from functools import cached_property
 from typing import Any, Dict, Union
 
 import numpy as np
 import pandas as pd
-from optimagic import mark
+from optimagic import deprecations, mark
 from optimagic.deprecations import replace_and_warn_about_deprecated_bounds
 from optimagic.differentiation.derivatives import first_derivative
+from optimagic.differentiation.numdiff_options import (
+    NumdiffPurpose,
+    get_default_numdiff_options,
+    pre_process_numdiff_options,
+)
 from optimagic.exceptions import InvalidFunctionError
 from optimagic.optimization.fun_value import LeastSquaresFunctionValue
 from optimagic.optimization.optimize import minimize
@@ -22,7 +27,6 @@ from optimagic.parameters.conversion import Converter, get_converter
 from optimagic.parameters.space_conversion import InternalParams
 from optimagic.parameters.tree_registry import get_registry
 from optimagic.shared.check_option_dicts import (
-    check_numdiff_options,
     check_optimization_options,
 )
 from optimagic.utilities import get_rng, to_pickle
@@ -65,12 +69,13 @@ def estimate_msm(
     log_options=None,
     simulate_moments_kwargs=None,
     weights="diagonal",
-    numdiff_options=None,
     jacobian=None,
     jacobian_kwargs=None,
+    jacobian_numdiff_options=None,
     # deprecated
     lower_bounds=None,
     upper_bounds=None,
+    numdiff_options=None,
 ):
     """Do a method of simulated moments or indirect inference estimation.
 
@@ -140,15 +145,15 @@ def estimate_msm(
             - "if_database_exists" (str):
                 One of "extend", "replace", "raise". What to do if the database we want
                 to write to already exists. Default "extend".
-        numdiff_options (dict): Keyword arguments for the calculation of numerical
-            derivatives for the calculation of standard errors. See
-            :ref:`first_derivative` for details. Note that by default we increase the
-            step_size by a factor of 2 compared to the rule of thumb for optimal
-            step sizes. This is because many msm criterion functions are slightly noisy.
         jacobian (callable): A function that take ``params`` and
             potentially other keyword arguments and returns the jacobian of
             simulate_moments with respect to the params.
         jacobian_kwargs (dict): Additional keyword arguments for the jacobian function.
+        jacobian_numdiff_options (dict): Keyword arguments for the calculation of
+            numerical derivatives for the calculation of standard errors. See
+            :ref:`first_derivative` for details. Note that by default we increase the
+            step_size by a factor of 2 compared to the rule of thumb for optimal
+            step sizes. This is because many msm criterion functions are slightly noisy.
 
         Returns:
             dict: The estimated parameters, standard errors and sensitivity measures
@@ -164,11 +169,22 @@ def estimate_msm(
         upper_bounds=upper_bounds,
         bounds=bounds,
     )
+
+    if numdiff_options is not None:
+        deprecations.throw_numdiff_options_deprecated_in_estimate_msm_future_warning()
+        if jacobian_numdiff_options is not None:
+            jacobian_numdiff_options = numdiff_options
+
     # ==================================================================================
     # Check and process inputs
     # ==================================================================================
 
     bounds = pre_process_bounds(bounds)
+    jacobian_numdiff_options = pre_process_numdiff_options(jacobian_numdiff_options)
+    if jacobian_numdiff_options is None:
+        jacobian_numdiff_options = get_default_numdiff_options(
+            purpose=NumdiffPurpose.ESTIMATE_JACOBIAN
+        )
 
     if weights not in ["diagonal", "optimal", "identity"]:
         raise NotImplementedError("Custom weighting matrices are not yet implemented.")
@@ -186,12 +202,6 @@ def estimate_msm(
         )
 
     jac_case = get_derivative_case(jacobian)
-
-    check_numdiff_options(numdiff_options, "estimate_msm")
-
-    numdiff_options = {} if numdiff_options in (None, False) else numdiff_options.copy()
-    if "scaling_factor" not in numdiff_options:
-        numdiff_options["scaling_factor"] = 2
 
     weights, internal_weights = get_weighting_matrix(
         moments_cov=moments_cov,
@@ -310,7 +320,8 @@ def estimate_msm(
                 lower=internal_estimates.lower_bounds,
                 upper=internal_estimates.upper_bounds,
             ),
-            **numdiff_options,
+            error_handling="continue",
+            **asdict(jacobian_numdiff_options),
         ).derivative
 
     # ==================================================================================

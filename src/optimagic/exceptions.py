@@ -55,6 +55,10 @@ class InvalidMultistartError(OptimagicError):
     """Exception for invalid user provided multistart options."""
 
 
+class InvalidNumdiffOptionsError(OptimagicError):
+    """Exception for invalid user provided numdiff options."""
+
+
 class NotInstalledError(OptimagicError):
     """Exception when optional dependencies are needed but not installed."""
 

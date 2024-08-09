@@ -138,6 +138,25 @@ def throw_numdiff_result_derivative_candidates_future_warning():
     warnings.warn(msg, FutureWarning)
 
 
+def throw_numdiff_options_deprecated_in_estimate_ml_future_warning():
+    msg = (
+        "The argument `numdiff_options` is deprecated for `estimate_ml` and will be "
+        "removed in estimagic version 0.6.0. Please use the `jacobian_numdiff_options` "
+        "and `hessian_numdiff_options` arguments instead to specify the options for "
+        "the first and second numerical derivative estimation."
+    )
+    warnings.warn(msg, FutureWarning)
+
+
+def throw_numdiff_options_deprecated_in_estimate_msm_future_warning():
+    msg = (
+        "The argument `numdiff_options` is deprecated for `estimate_msm` and will be "
+        "removed in estimagic version 0.6.0. Please use the `jacobian_numdiff_options` "
+        "argument instead."
+    )
+    warnings.warn(msg, FutureWarning)
+
+
 def throw_dict_access_future_warning(attribute, obj_name):
     msg = (
         f"The dictionary access for '{attribute}' is deprecated and will be removed "
@@ -363,21 +382,21 @@ def replace_and_warn_about_deprecated_multistart_options(options):
 
 
 def replace_and_warn_about_deprecated_base_steps(
-    steps,
+    step_size,
     base_steps,
 ):
     if base_steps is not None:
         msg = (
             "The `base_steps` argument is deprecated and will be removed alongside "
-            "Richardson extrapolation in optimagic version 0.6.0. To specify steps "
-            "for Richardson extrapolation, use the `steps` argument instead."
+            "Richardson extrapolation in optimagic version 0.6.0. To specify the "
+            "step size use the `step_size` argument instead."
         )
         warnings.warn(msg, FutureWarning)
 
-        if steps is None:
-            steps = base_steps
+        if step_size is None:
+            step_size = base_steps
 
-    return steps
+    return step_size
 
 
 def replace_and_warn_about_deprecated_derivatives(candidate, name):

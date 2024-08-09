@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from optimagic.examples.criterion_functions import sos_scalar
-from optimagic.exceptions import InvalidFunctionError, InvalidKwargsError
+from optimagic.exceptions import InvalidFunctionError, InvalidNumdiffOptionsError
 from optimagic.optimization.optimize import maximize, minimize
 
 
@@ -36,7 +36,7 @@ def test_scipy_lbfgsb_actually_calls_criterion_and_derivative():
 
 
 def test_with_invalid_numdiff_options():
-    with pytest.raises(InvalidKwargsError):
+    with pytest.raises(InvalidNumdiffOptionsError):
         minimize(
             fun=lambda x: x @ x,
             params=np.arange(5),

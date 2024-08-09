@@ -1,5 +1,6 @@
 from typing import get_args, get_type_hints
 
+from optimagic.differentiation.numdiff_options import NumdiffOptions, NumdiffOptionsDict
 from optimagic.optimization.multistart_options import (
     MultistartOptions,
     MultistartOptionsDict,
@@ -39,3 +40,7 @@ def test_scaling_options_and_dict_have_same_attributes():
 
 def test_multistart_options_and_dict_have_same_attributes():
     assert_attributes_and_type_hints_are_equal(MultistartOptions, MultistartOptionsDict)
+
+
+def test_numdiff_options_and_dict_have_same_attributes():
+    assert_attributes_and_type_hints_are_equal(NumdiffOptions, NumdiffOptionsDict)

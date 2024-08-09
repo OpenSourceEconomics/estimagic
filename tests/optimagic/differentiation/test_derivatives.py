@@ -60,7 +60,7 @@ def test_first_derivative_jacobian(binary_choice_inputs, method):
         func=func,
         method=method,
         params=fix["params_np"],
-        steps=None,
+        step_size=None,
         bounds=bounds,
         min_steps=1e-8,
         f0=func(fix["params_np"]),

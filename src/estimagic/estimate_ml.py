@@ -1,5 +1,5 @@
 import warnings
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from functools import cached_property
 from typing import Any, Dict
 
@@ -8,6 +8,11 @@ import pandas as pd
 from optimagic import deprecations, mark
 from optimagic.deprecations import replace_and_warn_about_deprecated_bounds
 from optimagic.differentiation.derivatives import first_derivative, second_derivative
+from optimagic.differentiation.numdiff_options import (
+    NumdiffPurpose,
+    get_default_numdiff_options,
+    pre_process_numdiff_options,
+)
 from optimagic.exceptions import InvalidFunctionError, NotAvailableError
 from optimagic.optimization.fun_value import (
     convert_fun_output_to_function_value,
@@ -20,7 +25,6 @@ from optimagic.parameters.bounds import Bounds, pre_process_bounds
 from optimagic.parameters.conversion import Converter, get_converter
 from optimagic.parameters.space_conversion import InternalParams
 from optimagic.shared.check_option_dicts import (
-    check_numdiff_options,
     check_optimization_options,
 )
 from optimagic.typing import AggregationLevel
@@ -57,15 +61,17 @@ def estimate_ml(
     logging=False,
     log_options=None,
     loglike_kwargs=None,
-    numdiff_options=None,
     jacobian=None,
     jacobian_kwargs=None,
+    jacobian_numdiff_options=None,
     hessian=None,
     hessian_kwargs=None,
+    hessian_numdiff_options=None,
     design_info=None,
     # deprecated
     lower_bounds=None,
     upper_bounds=None,
+    numdiff_options=None,
 ):
     """Do a maximum likelihood (ml) estimation.
 
@@ -118,15 +124,15 @@ def estimate_ml(
             - "if_database_exists": (str): One of "extend", "replace", "raise". What to
             do if the database we want to write to already exists. Default "extend".
         loglike_kwargs (dict): Additional keyword arguments for loglike.
-        numdiff_options (dict): Keyword arguments for the calculation of numerical
-            derivatives for the calculation of standard errors. See
-            :ref:`first_derivative` for details.
         jacobian (callable or None): A function that takes ``params`` and potentially
             other keyword arguments and returns the jacobian of loglike["contributions"]
             with respect to the params. Note that you only need to pass a Jacobian
             function if you have a closed form Jacobian. If you pass None, a numerical
             Jacobian will be calculated.
         jacobian_kwargs (dict): Additional keyword arguments for the Jacobian function.
+        jacobian_numdiff_options (dict): Keyword arguments for the calculation of
+            numerical derivatives for the calculation of standard errors. See
+            :ref:`first_derivative` for details.
         hessian (callable or None or False): A function that takes ``params`` and
             potentially other keyword arguments and returns the Hessian of
             loglike["value"] with respect to the params.  If you pass None, a numerical
@@ -134,6 +140,9 @@ def estimate_ml(
             Hessian should be calculated. Thus, no result that requires the Hessian will
             be calculated.
         hessian_kwargs (dict): Additional keyword arguments for the Hessian function.
+        hessian_numdiff_options (dict): Keyword arguments for the calculation of
+            numerical derivatives for the calculation of standard errors. See
+            :ref:`second_derivative` for details.
         design_info (pandas.DataFrame): DataFrame with one row per observation that
             contains some or all of the variables "psu" (primary sampling unit),
             "strata" and "fpc" (finite population corrector). See
@@ -154,6 +163,13 @@ def estimate_ml(
         bounds=bounds,
     )
 
+    if numdiff_options is not None:
+        deprecations.throw_numdiff_options_deprecated_in_estimate_ml_future_warning()
+        if jacobian_numdiff_options is None:
+            jacobian_numdiff_options = numdiff_options
+        if hessian_numdiff_options is None:
+            hessian_numdiff_options = numdiff_options
+
     # ==================================================================================
     # Check and process inputs
     # ==================================================================================
@@ -161,6 +177,18 @@ def estimate_ml(
     loglike = mark.likelihood(loglike)
 
     bounds = pre_process_bounds(bounds)
+    jacobian_numdiff_options = pre_process_numdiff_options(jacobian_numdiff_options)
+    hessian_numdiff_options = pre_process_numdiff_options(hessian_numdiff_options)
+
+    if jacobian_numdiff_options is None:
+        jacobian_numdiff_options = get_default_numdiff_options(
+            purpose=NumdiffPurpose.ESTIMATE_JACOBIAN
+        )
+
+    if hessian_numdiff_options is None:
+        hessian_numdiff_options = get_default_numdiff_options(
+            purpose=NumdiffPurpose.ESTIMATE_HESSIAN
+        )
 
     is_optimized = optimize_options is False
 
@@ -177,8 +205,6 @@ def estimate_ml(
     jac_case = get_derivative_case(jacobian)
     hess_case = get_derivative_case(hessian)
 
-    check_numdiff_options(numdiff_options, "estimate_ml")
-    numdiff_options = {} if numdiff_options in (None, False) else numdiff_options
     loglike_kwargs = {} if loglike_kwargs is None else loglike_kwargs
     constraints = [] if constraints is None else constraints
     jacobian_kwargs = {} if jacobian_kwargs is None else jacobian_kwargs
@@ -292,7 +318,8 @@ def estimate_ml(
                 lower=internal_estimates.lower_bounds,
                 upper=internal_estimates.upper_bounds,
             ),
-            **numdiff_options,
+            error_handling="continue",
+            **asdict(jacobian_numdiff_options),
         )
 
         int_jac = jac_res.derivative
@@ -339,7 +366,8 @@ def estimate_ml(
                 lower=internal_estimates.lower_bounds,
                 upper=internal_estimates.upper_bounds,
             ),
-            **numdiff_options,
+            error_handling="continue",
+            **asdict(hessian_numdiff_options),
         )
         int_hess = hess_res.derivative
     elif hess_case == "closed-form" and constraints:

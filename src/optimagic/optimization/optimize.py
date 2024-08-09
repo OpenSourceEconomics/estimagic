@@ -18,7 +18,6 @@ from pathlib import Path
 
 from optimagic.exceptions import (
     InvalidFunctionError,
-    InvalidKwargsError,
 )
 from optimagic.logging.create_tables import (
     make_optimization_iteration_table,
@@ -380,12 +379,6 @@ def _optimize(problem: OptimizationProblem) -> OptimizeResult:
             "constraints."
         )
 
-    numdiff_options = _fill_numdiff_options_with_defaults(
-        numdiff_options=problem.numdiff_options,
-        lower_bounds=internal_params.lower_bounds,
-        upper_bounds=internal_params.upper_bounds,
-    )
-
     # get error penalty function
     error_penalty_func = get_error_penalty_function(
         error_handling=problem.error_handling,
@@ -400,12 +393,17 @@ def _optimize(problem: OptimizationProblem) -> OptimizeResult:
     internal_constraints = process_nonlinear_constraints(
         nonlinear_constraints=nonlinear_constraints,
         params=problem.params,
+        bounds=problem.bounds,
         converter=converter,
-        numdiff_options=numdiff_options,
+        numdiff_options=problem.numdiff_options,
         skip_checks=problem.skip_checks,
     )
 
     x = internal_params.values
+    internal_bounds = Bounds(
+        lower=internal_params.lower_bounds,
+        upper=internal_params.upper_bounds,
+    )
     # ==================================================================================
     # get the internal algorithm
     # ==================================================================================
@@ -430,12 +428,13 @@ def _optimize(problem: OptimizationProblem) -> OptimizeResult:
         "converter": converter,
         "derivative": problem.jac,
         "criterion_and_derivative": problem.fun_and_jac,
-        "numdiff_options": numdiff_options,
+        "numdiff_options": problem.numdiff_options,
         "logging": problem.logging,
         "database": database,
         "algo_info": problem.algo_info,
         "error_handling": problem.error_handling,
         "error_penalty_func": error_penalty_func,
+        "bounds": internal_bounds,
     }
 
     internal_criterion_and_derivative = functools.partial(
@@ -558,44 +557,3 @@ def _create_and_initialize_database(logging, log_options, problem_data):
     append_row(problem_data, "optimization_problem", database=database)
 
     return database
-
-
-def _fill_numdiff_options_with_defaults(numdiff_options, lower_bounds, upper_bounds):
-    """Fill options for numerical derivatives during optimization with defaults."""
-    method = numdiff_options.get("method", "forward")
-    default_error_handling = "raise" if method == "central" else "raise_strict"
-
-    relevant = {
-        "method",
-        "n_steps",
-        "base_steps",
-        "scaling_factor",
-        "lower_bounds",
-        "upper_bounds",
-        "step_ratio",
-        "min_steps",
-        "n_cores",
-        "error_handling",
-        "batch_evaluator",
-    }
-
-    ignored = [option for option in numdiff_options if option not in relevant]
-
-    if ignored:
-        raise InvalidKwargsError(
-            f"The following numdiff_options are not allowed:\n\n{ignored}"
-        )
-
-    numdiff_options = {
-        key: val for key, val in numdiff_options.items() if key in relevant
-    }
-
-    # only define the ones that deviate from the normal defaults
-    default_numdiff_options = {
-        "method": "forward",
-        "bounds": Bounds(lower=lower_bounds, upper=upper_bounds),
-        "error_handling": default_error_handling,
-    }
-
-    numdiff_options = {**default_numdiff_options, **numdiff_options}
-    return numdiff_options

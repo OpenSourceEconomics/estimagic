@@ -1,4 +1,5 @@
 import itertools
+from dataclasses import asdict, replace
 from functools import partial
 
 import numpy as np
@@ -15,6 +16,7 @@ from optimagic.parameters.tree_registry import get_registry
 def process_nonlinear_constraints(
     nonlinear_constraints,
     params,
+    bounds,
     converter,
     numdiff_options,
     skip_checks,
@@ -28,12 +30,13 @@ def process_nonlinear_constraints(
             criterion is optimized. Examples are a numpy array, a pandas Series,
             a DataFrame with "value" column, a float and any kind of (nested) dictionary
             or list containing these elements. See :ref:`params` for examples.
+        bounds (Bounds): Bounds object containing information on the bounds of the
+            parameters. See :ref:`bounds` for details.
         converter (Converter): NamedTuple with methods to convert between internal and
             external parameters, derivatives and function outputs.
-        numdiff_options (dict): Keyword arguments for the calculation of numerical
-            derivatives. See :ref:`first_derivative` for details. Note that the default
-            method is changed to "forward" for speed reasons. Contains lower and upper
-            bounds of parameters.
+        numdiff_options (NumdiffOptions): Options for numerical derivatives. See
+            :ref:`first_derivative` for details. Note that the default method is changed
+            to "forward" for speed reasons.
         skip_checks (bool): Whether checks on the inputs are skipped. This makes the
             optimization faster, especially for very fast constraint functions. Default
             False.
@@ -56,6 +59,7 @@ def process_nonlinear_constraints(
             _constraint,
             constraint_eval=_eval,
             params=params,
+            bounds=bounds,
             converter=converter,
             numdiff_options=numdiff_options,
         )
@@ -65,7 +69,7 @@ def process_nonlinear_constraints(
 
 
 def _process_nonlinear_constraint(
-    c, constraint_eval, params, converter, numdiff_options
+    c, constraint_eval, params, bounds, converter, numdiff_options
 ):
     """Process a single nonlinear constraint."""
 
@@ -81,6 +85,15 @@ def _process_nonlinear_constraint(
         selected = external_selector(params)
         constraint_eval = constraint_func(selected)
 
+    if bounds is not None:
+        constraint_bounds = replace(
+            bounds,
+            lower=external_selector(bounds.lower),
+            upper=external_selector(bounds.upper),
+        )
+    else:
+        constraint_bounds = None
+
     _n_constr = len(np.atleast_1d(constraint_eval))
 
     # ==================================================================================
@@ -88,8 +101,6 @@ def _process_nonlinear_constraint(
     # ==================================================================================
 
     # process numdiff_options for numerical derivative
-    options = numdiff_options.copy()
-    options.pop("bounds", None)
 
     if "derivative" in c:
         if not callable(c["derivative"]):
@@ -102,7 +113,9 @@ def _process_nonlinear_constraint(
             return first_derivative(
                 constraint_func,
                 p,
-                **options,
+                bounds=constraint_bounds,
+                error_handling="raise_strict",
+                **asdict(numdiff_options),
             ).derivative
 
     # To define the internal Jacobian we need to know which parameters enter the

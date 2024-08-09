@@ -482,6 +482,22 @@ def test_old_bounds_are_deprecated_in_estimate_ml(bounds_kwargs):
         )
 
 
+def test_numdiff_options_is_deprecated_in_estimate_ml():
+    msg = "The argument `numdiff_options` is deprecated"
+    with pytest.warns(FutureWarning, match=msg):
+
+        @om.mark.likelihood
+        def loglike(x):
+            return -(x**2)
+
+        em.estimate_ml(
+            loglike=loglike,
+            params=np.arange(3),
+            optimize_options={"algorithm": "scipy_lbfgsb"},
+            numdiff_options={"method": "forward"},
+        )
+
+
 @pytest.mark.parametrize("bounds_kwargs", BOUNDS_KWARGS)
 def test_old_bounds_are_deprecated_in_estimate_msm(bounds_kwargs):
     msg = "Specifying bounds via the arguments"
@@ -493,6 +509,19 @@ def test_old_bounds_are_deprecated_in_estimate_msm(bounds_kwargs):
             params=np.arange(3),
             optimize_options={"algorithm": "scipy_lbfgsb"},
             **bounds_kwargs,
+        )
+
+
+def test_numdiff_options_is_deprecated_in_estimate_msm():
+    msg = "The argument `numdiff_options` is deprecated"
+    with pytest.warns(FutureWarning, match=msg):
+        em.estimate_msm(
+            simulate_moments=lambda x: x,
+            empirical_moments=np.zeros(3),
+            moments_cov=np.eye(3),
+            params=np.arange(3),
+            optimize_options={"algorithm": "scipy_lbfgsb"},
+            numdiff_options={"method": "forward"},
         )
 
 
